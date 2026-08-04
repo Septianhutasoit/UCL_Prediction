@@ -11,7 +11,7 @@
 
 ---
 
-## 🖼️ UCL Madrid — Banner & Preview
+## 🖼️ UCL Madridista — Banner & Preview
 
 <div align="center">
 
