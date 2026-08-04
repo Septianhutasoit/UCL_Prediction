@@ -7,13 +7,6 @@
     <strong>⚽ UEFA Champions League — Real Madrid AI Predictor & Analytics Engine</strong>
   </p>
 
-  <p align="center">
-    <img src="https://img.shields.io/badge/UCL_2025/26-Real_Madrid-0F4C81?style=for-the-badge&logo=uefa&logoColor=white" />
-    <img src="https://img.shields.io/badge/Architecture-Monorepo-007ACC?style=for-the-badge" />
-    <img src="https://img.shields.io/badge/Backend-Go_Gin-00ADD8?style=for-the-badge&logo=go&logoColor=white" />
-    <img src="https://img.shields.io/badge/AI-FastAPI_%2B_XGBoost_%2B_Qwen-FF69B4?style=for-the-badge&logo=python&logoColor=white" />
-  </p>
-
 </div>
 
 ---
