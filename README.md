@@ -33,15 +33,6 @@
 
 ---
 
-## 📖 About This Media
-
-| Detail | Informasi |
-|--------|-----------|
-| 🏆 **Event** | UEFA Champions League 2025/26 |
-| ⚪ **Team** | Real Madrid C.F. |
-| 🖼️ **Format** | Banner Image (JPG) |
-| 📁 **Path** | `./apps/web/public/UCL.jpg` |
-
 ---
 
 ## 🚀 ChampIntel AI — Masterplan Proyek
