@@ -18,33 +18,29 @@
 
 ---
 
-## 🎥 UCL Madrid — Highlight Video
+## 🖼️ UCL Madrid — Banner & Preview
 
 <div align="center">
 
-  <!-- VIDEO SECTION -->
-  <video width="100%" controls autoplay muted loop playsinline style="border-radius: 16px; max-width: 900px; box-shadow: 0 20px 60px rgba(0,0,0,0.5);">
-    <source src="apps/web/public/video/ucl-highlight.mp4.mp4" type="video/mp4">
-    Your browser does not support the video tag.
-  </video>
+  <!-- IMAGE BANNER -->
+  <img src="./apps/web/public/UCL.jpg" alt="UCL Real Madrid" width="100%" style="border-radius: 16px; max-width: 900px; box-shadow: 0 20px 60px rgba(0,0,0,0.5);" />
 
   <p align="center" style="margin-top: 0.75rem; color: rgba(255,255,255,0.5); font-size: 0.85rem;">
-    🎬 Real Madrid UCL Highlights • 2025/26 Season
+    ⚽ Real Madrid UCL Analytics • 2025/26 Season
   </p>
 
 </div>
 
 ---
 
-## 📖 About This Video
+## 📖 About This Media
 
 | Detail | Informasi |
 |--------|-----------|
 | 🏆 **Event** | UEFA Champions League 2025/26 |
 | ⚪ **Team** | Real Madrid C.F. |
-| 🎥 **Format** | 4K Ultra HD • 60fps |
-| ⏱️ **Duration** | 0:07 seconds |
-| 📁 **Path** | `apps/web/public/video/ucl-highlight.mp4.mp4` |
+| 🖼️ **Format** | Banner Image (JPG) |
+| 📁 **Path** | `./apps/web/public/UCL.jpg` |
 
 ---
 
