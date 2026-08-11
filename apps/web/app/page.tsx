@@ -15,6 +15,18 @@ const teamLogoMap: { [key: string]: string } = {
   'Juventus': '/team/juve.png',
   'Paris Saint-Germain': '/team/psg.png',
   'Ajax': '/team/ajax.png',
+  'Barcelona': '/team/barca.png',
+  'Inter Milan': '/team/inter.png',
+  'Inter': '/team/inter.png',
+  'Borussia Dortmund': '/team/dortmund.png',
+  'Dortmund': '/team/dortmund.png',
+  'Atlético Madrid': '/team/atm.png',
+  'Atletico Madrid': '/team/atm.png',
+  'Napoli': '/team/napoli.png',
+  'Benfica': '/team/benfica.png',
+  'PSV': '/team/psv.png',
+  'Sporting CP': '/team/sporting.png',
+  'Tottenham Hotspur': '/team/spurs.png',
 };
 
 export default function Home() {
