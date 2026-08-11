@@ -34,7 +34,7 @@ export default function RootLayout({
   return (
     <html lang="en" className="dark">
       <head>
-        <title>ChampIntel - UCL AI Match Analysis</title>
+        <title>ChamphionsLeague -  AI Match Analysis</title>
         <meta
           name="description"
           content="AI-Powered UEFA Champions League Match Prediction & Analysis Platform"
@@ -52,8 +52,8 @@ export default function RootLayout({
           {/* Header: Logo & Tombol Toggle */}
           <div className={`flex items-center p-3.5 border-b border-slate-800/80 ${collapsed ? 'flex-col gap-3' : 'justify-between'}`}>
             <div className="flex items-center space-x-2.5">
-              <div className="relative flex h-8 w-8 shrink-0 items-center justify-center rounded-xl border border-blue-500/30 bg-gradient-to-br from-blue-500/20 to-indigo-600/20 p-1.5 shadow-md">
-                <Image src="/icon.png" alt="ChampIntel Logo" width={20} height={20} className="object-contain" />
+              <div className="relative flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-slate-700 overflow-hidden shadow-md">
+                <Image src="/icon.png" alt="ChampIntel Logo" fill className="object-cover" />
               </div>
               <AnimatePresence initial={false}>
                 {!collapsed && (

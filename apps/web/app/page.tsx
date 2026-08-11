@@ -101,12 +101,25 @@ export default function Home() {
         elo_difference: 45.0,
       });
       setResult(data);
+
+      const newHistoryItem = {
+        id: Date.now(),
+        date: new Date().toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' }),
+        homeTeam,
+        awayTeam,
+        matchLeg,
+        result: data,
+      };
+      const existing = JSON.parse(localStorage.getItem('ucl_predictions') || '[]');
+      localStorage.setItem('ucl_predictions', JSON.stringify([newHistoryItem, ...existing]));
+      
     } catch (err: any) {
       setError(err.message || 'Terjadi kesalahan sistem.');
     } finally {
       setLoading(false);
     }
   };
+  
 
   return (
     <div className="mx-auto max-w-6xl space-y-8">
