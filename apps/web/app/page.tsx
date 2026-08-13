@@ -49,15 +49,13 @@ export default function Home() {
     setResult(null);
 
     try {
+      // Hanya mengirim identitas tim dan skor leg, statistik dihitung otomatis oleh AI Service
       const data = await fetchPrediction({
         home_team: homeTeam,
         away_team: awayTeam,
         match_leg: Number(matchLeg),
         home_leg1_score: matchLeg === 2 ? Number(homeLeg1) : null,
         away_leg1_score: matchLeg === 2 ? Number(awayLeg1) : null,
-        home_win_rate: 0.75,
-        away_win_rate: 0.65,
-        elo_difference: 45.0,
       });
       setResult(data);
 

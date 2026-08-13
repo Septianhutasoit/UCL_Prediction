@@ -1,0 +1,1482 @@
+{
+    "Udinese": {
+        "win_rate": 0.381,
+        "avg_scored": 1.37,
+        "avg_conceded": 1.34
+    },
+    "Heart of Midlothian": {
+        "win_rate": 0.38,
+        "avg_scored": 1.19,
+        "avg_conceded": 1.22
+    },
+    "AS Saint-\u00c9tienne": {
+        "win_rate": 0.398,
+        "avg_scored": 1.22,
+        "avg_conceded": 1.07
+    },
+    "Wigan Athletic": {
+        "win_rate": 0.263,
+        "avg_scored": 1.05,
+        "avg_conceded": 1.68
+    },
+    "Blackburn Rovers": {
+        "win_rate": 0.276,
+        "avg_scored": 1.15,
+        "avg_conceded": 1.66
+    },
+    "Zawisza Bydgoszcz": {
+        "win_rate": 0.317,
+        "avg_scored": 1.25,
+        "avg_conceded": 1.48
+    },
+    "VfL Wolfsburg": {
+        "win_rate": 0.43,
+        "avg_scored": 1.7,
+        "avg_conceded": 1.46
+    },
+    "FC Schalke 04": {
+        "win_rate": 0.467,
+        "avg_scored": 1.57,
+        "avg_conceded": 1.24
+    },
+    "Portimonense": {
+        "win_rate": 0.2,
+        "avg_scored": 0.97,
+        "avg_conceded": 1.63
+    },
+    "KV Kortrijk": {
+        "win_rate": 0.387,
+        "avg_scored": 1.26,
+        "avg_conceded": 1.23
+    },
+    "Real Madrid CF": {
+        "win_rate": 0.75,
+        "avg_scored": 2.77,
+        "avg_conceded": 1.0
+    },
+    "Torino": {
+        "win_rate": 0.3,
+        "avg_scored": 1.27,
+        "avg_conceded": 1.39
+    },
+    "West Ham United": {
+        "win_rate": 0.301,
+        "avg_scored": 1.23,
+        "avg_conceded": 1.44
+    },
+    "Heracles Almelo": {
+        "win_rate": 0.342,
+        "avg_scored": 1.48,
+        "avg_conceded": 1.7
+    },
+    "FC Lorient": {
+        "win_rate": 0.319,
+        "avg_scored": 1.24,
+        "avg_conceded": 1.33
+    },
+    "Angers SCO": {
+        "win_rate": 0.342,
+        "avg_scored": 1.05,
+        "avg_conceded": 1.0
+    },
+    "M\u00e1laga CF": {
+        "win_rate": 0.349,
+        "avg_scored": 1.24,
+        "avg_conceded": 1.34
+    },
+    "Eintracht Frankfurt": {
+        "win_rate": 0.303,
+        "avg_scored": 1.24,
+        "avg_conceded": 1.6
+    },
+    "OGC Nice": {
+        "win_rate": 0.349,
+        "avg_scored": 1.12,
+        "avg_conceded": 1.24
+    },
+    "FC Nantes": {
+        "win_rate": 0.296,
+        "avg_scored": 0.89,
+        "avg_conceded": 1.19
+    },
+    "Everton": {
+        "win_rate": 0.398,
+        "avg_scored": 1.44,
+        "avg_conceded": 1.17
+    },
+    "RAEC Mons": {
+        "win_rate": 0.266,
+        "avg_scored": 1.37,
+        "avg_conceded": 1.76
+    },
+    "St. Johnstone FC": {
+        "win_rate": 0.368,
+        "avg_scored": 1.16,
+        "avg_conceded": 1.24
+    },
+    "Portsmouth": {
+        "win_rate": 0.224,
+        "avg_scored": 0.95,
+        "avg_conceded": 1.62
+    },
+    "Hellas Verona": {
+        "win_rate": 0.281,
+        "avg_scored": 1.27,
+        "avg_conceded": 1.72
+    },
+    "Hamilton Academical FC": {
+        "win_rate": 0.295,
+        "avg_scored": 0.97,
+        "avg_conceded": 1.44
+    },
+    "FC Vaduz": {
+        "win_rate": 0.176,
+        "avg_scored": 0.93,
+        "avg_conceded": 1.89
+    },
+    "Oud-Heverlee Leuven": {
+        "win_rate": 0.244,
+        "avg_scored": 1.4,
+        "avg_conceded": 1.8
+    },
+    "Podbeskidzie Bielsko-Bia\u0142a": {
+        "win_rate": 0.28,
+        "avg_scored": 1.13,
+        "avg_conceded": 1.43
+    },
+    "Lazio": {
+        "win_rate": 0.435,
+        "avg_scored": 1.39,
+        "avg_conceded": 1.21
+    },
+    "Racing Santander": {
+        "win_rate": 0.243,
+        "avg_scored": 1.05,
+        "avg_conceded": 1.49
+    },
+    "Frosinone": {
+        "win_rate": 0.211,
+        "avg_scored": 0.92,
+        "avg_conceded": 2.0
+    },
+    "FC Groningen": {
+        "win_rate": 0.401,
+        "avg_scored": 1.43,
+        "avg_conceded": 1.48
+    },
+    "Granada CF": {
+        "win_rate": 0.274,
+        "avg_scored": 0.94,
+        "avg_conceded": 1.57
+    },
+    "Ross County FC": {
+        "win_rate": 0.329,
+        "avg_scored": 1.26,
+        "avg_conceded": 1.54
+    },
+    "Odra Wodzis\u0142aw": {
+        "win_rate": 0.25,
+        "avg_scored": 0.83,
+        "avg_conceded": 1.42
+    },
+    "ADO Den Haag": {
+        "win_rate": 0.29,
+        "avg_scored": 1.35,
+        "avg_conceded": 1.72
+    },
+    "SC Bastia": {
+        "win_rate": 0.336,
+        "avg_scored": 1.09,
+        "avg_conceded": 1.39
+    },
+    "Real Betis Balompi\u00e9": {
+        "win_rate": 0.295,
+        "avg_scored": 1.18,
+        "avg_conceded": 1.58
+    },
+    "Stade Brestois 29": {
+        "win_rate": 0.237,
+        "avg_scored": 0.87,
+        "avg_conceded": 1.25
+    },
+    "Hamburger SV": {
+        "win_rate": 0.342,
+        "avg_scored": 1.26,
+        "avg_conceded": 1.55
+    },
+    "Real Sporting de Gij\u00f3n": {
+        "win_rate": 0.284,
+        "avg_scored": 1.05,
+        "avg_conceded": 1.59
+    },
+    "FC Thun": {
+        "win_rate": 0.332,
+        "avg_scored": 1.3,
+        "avg_conceded": 1.32
+    },
+    "Arsenal": {
+        "win_rate": 0.559,
+        "avg_scored": 1.88,
+        "avg_conceded": 1.05
+    },
+    "AJ Auxerre": {
+        "win_rate": 0.349,
+        "avg_scored": 1.11,
+        "avg_conceded": 1.07
+    },
+    "Sparta Rotterdam": {
+        "win_rate": 0.221,
+        "avg_scored": 1.12,
+        "avg_conceded": 1.94
+    },
+    "Reading": {
+        "win_rate": 0.158,
+        "avg_scored": 1.13,
+        "avg_conceded": 1.92
+    },
+    "SC Braga": {
+        "win_rate": 0.508,
+        "avg_scored": 1.6,
+        "avg_conceded": 1.0
+    },
+    "KV Mechelen": {
+        "win_rate": 0.373,
+        "avg_scored": 1.34,
+        "avg_conceded": 1.46
+    },
+    "1. FC K\u00f6ln": {
+        "win_rate": 0.294,
+        "avg_scored": 1.11,
+        "avg_conceded": 1.52
+    },
+    "Napoli": {
+        "win_rate": 0.508,
+        "avg_scored": 1.71,
+        "avg_conceded": 1.08
+    },
+    "Standard de Li\u00e8ge": {
+        "win_rate": 0.5,
+        "avg_scored": 1.61,
+        "avg_conceded": 1.2
+    },
+    "Club Brugge KV": {
+        "win_rate": 0.58,
+        "avg_scored": 1.99,
+        "avg_conceded": 1.18
+    },
+    "Getafe CF": {
+        "win_rate": 0.309,
+        "avg_scored": 1.13,
+        "avg_conceded": 1.5
+    },
+    "Beerschot AC": {
+        "win_rate": 0.263,
+        "avg_scored": 1.14,
+        "avg_conceded": 1.56
+    },
+    "DSC Arminia Bielefeld": {
+        "win_rate": 0.118,
+        "avg_scored": 0.85,
+        "avg_conceded": 1.65
+    },
+    "Gil Vicente FC": {
+        "win_rate": 0.21,
+        "avg_scored": 0.89,
+        "avg_conceded": 1.56
+    },
+    "Borussia Dortmund": {
+        "win_rate": 0.577,
+        "avg_scored": 2.03,
+        "avg_conceded": 1.04
+    },
+    "Birmingham City": {
+        "win_rate": 0.276,
+        "avg_scored": 0.99,
+        "avg_conceded": 1.38
+    },
+    "Vitesse": {
+        "win_rate": 0.386,
+        "avg_scored": 1.56,
+        "avg_conceded": 1.42
+    },
+    "Neuch\u00e2tel Xamax": {
+        "win_rate": 0.286,
+        "avg_scored": 1.36,
+        "avg_conceded": 1.61
+    },
+    "Le Mans FC": {
+        "win_rate": 0.237,
+        "avg_scored": 1.04,
+        "avg_conceded": 1.49
+    },
+    "Aston Villa": {
+        "win_rate": 0.283,
+        "avg_scored": 1.1,
+        "avg_conceded": 1.52
+    },
+    "Tubize": {
+        "win_rate": 0.206,
+        "avg_scored": 1.03,
+        "avg_conceded": 2.26
+    },
+    "Stoke City": {
+        "win_rate": 0.322,
+        "avg_scored": 1.06,
+        "avg_conceded": 1.32
+    },
+    "Sporting CP": {
+        "win_rate": 0.581,
+        "avg_scored": 1.66,
+        "avg_conceded": 0.84
+    },
+    "GFC Ajaccio": {
+        "win_rate": 0.211,
+        "avg_scored": 0.97,
+        "avg_conceded": 1.53
+    },
+    "Borussia M\u00f6nchengladbach": {
+        "win_rate": 0.401,
+        "avg_scored": 1.48,
+        "avg_conceded": 1.39
+    },
+    "FC Twente": {
+        "win_rate": 0.529,
+        "avg_scored": 1.87,
+        "avg_conceded": 1.17
+    },
+    "Villarreal CF": {
+        "win_rate": 0.421,
+        "avg_scored": 1.37,
+        "avg_conceded": 1.22
+    },
+    "VfB Stuttgart": {
+        "win_rate": 0.364,
+        "avg_scored": 1.53,
+        "avg_conceded": 1.62
+    },
+    "Wolverhampton Wanderers": {
+        "win_rate": 0.219,
+        "avg_scored": 1.04,
+        "avg_conceded": 1.79
+    },
+    "RKC Waalwijk": {
+        "win_rate": 0.25,
+        "avg_scored": 1.12,
+        "avg_conceded": 1.77
+    },
+    "Valencia CF": {
+        "win_rate": 0.467,
+        "avg_scored": 1.59,
+        "avg_conceded": 1.21
+    },
+    "FC St. Gallen": {
+        "win_rate": 0.333,
+        "avg_scored": 1.28,
+        "avg_conceded": 1.56
+    },
+    "Eintracht Braunschweig": {
+        "win_rate": 0.176,
+        "avg_scored": 0.85,
+        "avg_conceded": 1.76
+    },
+    "CF Os Belenenses": {
+        "win_rate": 0.234,
+        "avg_scored": 0.94,
+        "avg_conceded": 1.46
+    },
+    "Lugano": {
+        "win_rate": 0.25,
+        "avg_scored": 1.28,
+        "avg_conceded": 2.08
+    },
+    "Carpi": {
+        "win_rate": 0.237,
+        "avg_scored": 0.97,
+        "avg_conceded": 1.5
+    },
+    "Hertha BSC Berlin": {
+        "win_rate": 0.319,
+        "avg_scored": 1.17,
+        "avg_conceded": 1.49
+    },
+    "SD Eibar": {
+        "win_rate": 0.263,
+        "avg_scored": 1.09,
+        "avg_conceded": 1.53
+    },
+    "Atalanta": {
+        "win_rate": 0.3,
+        "avg_scored": 1.08,
+        "avg_conceded": 1.34
+    },
+    "Real Zaragoza": {
+        "win_rate": 0.283,
+        "avg_scored": 1.05,
+        "avg_conceded": 1.58
+    },
+    "Juventus": {
+        "win_rate": 0.628,
+        "avg_scored": 1.8,
+        "avg_conceded": 0.83
+    },
+    "Catania": {
+        "win_rate": 0.299,
+        "avg_scored": 1.12,
+        "avg_conceded": 1.38
+    },
+    "\u015al\u0105sk Wroc\u0142aw": {
+        "win_rate": 0.371,
+        "avg_scored": 1.32,
+        "avg_conceded": 1.2
+    },
+    "Feyenoord": {
+        "win_rate": 0.511,
+        "avg_scored": 1.8,
+        "avg_conceded": 1.19
+    },
+    "Bolton Wanderers": {
+        "win_rate": 0.283,
+        "avg_scored": 1.19,
+        "avg_conceded": 1.66
+    },
+    "FC Augsburg": {
+        "win_rate": 0.324,
+        "avg_scored": 1.18,
+        "avg_conceded": 1.42
+    },
+    "Bari": {
+        "win_rate": 0.237,
+        "avg_scored": 1.0,
+        "avg_conceded": 1.38
+    },
+    "FC Bayern Munich": {
+        "win_rate": 0.71,
+        "avg_scored": 2.4,
+        "avg_conceded": 0.78
+    },
+    "TSG 1899 Hoffenheim": {
+        "win_rate": 0.32,
+        "avg_scored": 1.47,
+        "avg_conceded": 1.6
+    },
+    "Dundee United": {
+        "win_rate": 0.378,
+        "avg_scored": 1.44,
+        "avg_conceded": 1.43
+    },
+    "Roda JC Kerkrade": {
+        "win_rate": 0.298,
+        "avg_scored": 1.44,
+        "avg_conceded": 1.81
+    },
+    "Rio Ave FC": {
+        "win_rate": 0.302,
+        "avg_scored": 1.0,
+        "avg_conceded": 1.23
+    },
+    "Reggio Calabria": {
+        "win_rate": 0.158,
+        "avg_scored": 0.79,
+        "avg_conceded": 1.63
+    },
+    "Real Sociedad": {
+        "win_rate": 0.368,
+        "avg_scored": 1.39,
+        "avg_conceded": 1.41
+    },
+    "Milan": {
+        "win_rate": 0.508,
+        "avg_scored": 1.64,
+        "avg_conceded": 1.03
+    },
+    "Trofense": {
+        "win_rate": 0.167,
+        "avg_scored": 0.83,
+        "avg_conceded": 1.4
+    },
+    "Montpellier H\u00e9rault SC": {
+        "win_rate": 0.414,
+        "avg_scored": 1.29,
+        "avg_conceded": 1.15
+    },
+    "VfL Bochum": {
+        "win_rate": 0.191,
+        "avg_scored": 1.06,
+        "avg_conceded": 1.75
+    },
+    "Newcastle United": {
+        "win_rate": 0.308,
+        "avg_scored": 1.22,
+        "avg_conceded": 1.59
+    },
+    "Inter": {
+        "win_rate": 0.508,
+        "avg_scored": 1.64,
+        "avg_conceded": 1.13
+    },
+    "De Graafschap": {
+        "win_rate": 0.199,
+        "avg_scored": 0.96,
+        "avg_conceded": 1.87
+    },
+    "FC Arouca": {
+        "win_rate": 0.286,
+        "avg_scored": 1.03,
+        "avg_conceded": 1.33
+    },
+    "N.E.C.": {
+        "win_rate": 0.286,
+        "avg_scored": 1.3,
+        "avg_conceded": 1.64
+    },
+    "CS Mar\u00edtimo": {
+        "win_rate": 0.343,
+        "avg_scored": 1.27,
+        "avg_conceded": 1.4
+    },
+    "Moreirense FC": {
+        "win_rate": 0.255,
+        "avg_scored": 1.03,
+        "avg_conceded": 1.5
+    },
+    "Kilmarnock": {
+        "win_rate": 0.283,
+        "avg_scored": 1.14,
+        "avg_conceded": 1.5
+    },
+    "Ajax": {
+        "win_rate": 0.665,
+        "avg_scored": 2.38,
+        "avg_conceded": 0.87
+    },
+    "Fulham": {
+        "win_rate": 0.311,
+        "avg_scored": 1.16,
+        "avg_conceded": 1.4
+    },
+    "US Boulogne Cote D'Opale": {
+        "win_rate": 0.184,
+        "avg_scored": 0.82,
+        "avg_conceded": 1.63
+    },
+    "Grenoble Foot 38": {
+        "win_rate": 0.197,
+        "avg_scored": 0.72,
+        "avg_conceded": 1.29
+    },
+    "Girondins de Bordeaux": {
+        "win_rate": 0.414,
+        "avg_scored": 1.33,
+        "avg_conceded": 1.1
+    },
+    "Sporting Charleroi": {
+        "win_rate": 0.302,
+        "avg_scored": 1.1,
+        "avg_conceded": 1.46
+    },
+    "Lecce": {
+        "win_rate": 0.216,
+        "avg_scored": 1.09,
+        "avg_conceded": 1.67
+    },
+    "Empoli": {
+        "win_rate": 0.263,
+        "avg_scored": 1.13,
+        "avg_conceded": 1.33
+    },
+    "FC Dordrecht": {
+        "win_rate": 0.118,
+        "avg_scored": 0.71,
+        "avg_conceded": 2.24
+    },
+    "Siena": {
+        "win_rate": 0.247,
+        "avg_scored": 0.99,
+        "avg_conceded": 1.42
+    },
+    "Manchester United": {
+        "win_rate": 0.632,
+        "avg_scored": 1.91,
+        "avg_conceded": 0.92
+    },
+    "Stade de Reims": {
+        "win_rate": 0.289,
+        "avg_scored": 1.11,
+        "avg_conceded": 1.43
+    },
+    "Fortuna D\u00fcsseldorf": {
+        "win_rate": 0.206,
+        "avg_scored": 1.15,
+        "avg_conceded": 1.68
+    },
+    "Novara": {
+        "win_rate": 0.167,
+        "avg_scored": 0.94,
+        "avg_conceded": 1.78
+    },
+    "FC Energie Cottbus": {
+        "win_rate": 0.235,
+        "avg_scored": 0.88,
+        "avg_conceded": 1.68
+    },
+    "Chievo Verona": {
+        "win_rate": 0.287,
+        "avg_scored": 0.94,
+        "avg_conceded": 1.21
+    },
+    "Rangers": {
+        "win_rate": 0.711,
+        "avg_scored": 2.13,
+        "avg_conceded": 0.74
+    },
+    "Sevilla FC": {
+        "win_rate": 0.457,
+        "avg_scored": 1.57,
+        "avg_conceded": 1.31
+    },
+    "C\u00f3rdoba CF": {
+        "win_rate": 0.079,
+        "avg_scored": 0.58,
+        "avg_conceded": 1.79
+    },
+    "LOSC Lille": {
+        "win_rate": 0.484,
+        "avg_scored": 1.48,
+        "avg_conceded": 0.95
+    },
+    "CD Nacional": {
+        "win_rate": 0.379,
+        "avg_scored": 1.34,
+        "avg_conceded": 1.39
+    },
+    "Sunderland": {
+        "win_rate": 0.257,
+        "avg_scored": 1.1,
+        "avg_conceded": 1.45
+    },
+    "Ruch Chorz\u00f3w": {
+        "win_rate": 0.383,
+        "avg_scored": 1.17,
+        "avg_conceded": 1.22
+    },
+    "Le Havre AC": {
+        "win_rate": 0.184,
+        "avg_scored": 0.79,
+        "avg_conceded": 1.76
+    },
+    "SV Werder Bremen": {
+        "win_rate": 0.327,
+        "avg_scored": 1.56,
+        "avg_conceded": 1.73
+    },
+    "PSV": {
+        "win_rate": 0.654,
+        "avg_scored": 2.4,
+        "avg_conceded": 1.08
+    },
+    "Southampton": {
+        "win_rate": 0.395,
+        "avg_scored": 1.42,
+        "avg_conceded": 1.18
+    },
+    "Pogo\u0144 Szczecin": {
+        "win_rate": 0.35,
+        "avg_scored": 1.27,
+        "avg_conceded": 1.21
+    },
+    "Lierse SK": {
+        "win_rate": 0.175,
+        "avg_scored": 0.9,
+        "avg_conceded": 1.76
+    },
+    "FC Z\u00fcrich": {
+        "win_rate": 0.42,
+        "avg_scored": 1.64,
+        "avg_conceded": 1.4
+    },
+    "Sampdoria": {
+        "win_rate": 0.316,
+        "avg_scored": 1.2,
+        "avg_conceded": 1.35
+    },
+    "GKS Be\u0142chat\u00f3w": {
+        "win_rate": 0.344,
+        "avg_scored": 1.06,
+        "avg_conceded": 1.13
+    },
+    "SC Cambuur": {
+        "win_rate": 0.235,
+        "avg_scored": 1.17,
+        "avg_conceded": 1.81
+    },
+    "KSV Roeselare": {
+        "win_rate": 0.194,
+        "avg_scored": 1.0,
+        "avg_conceded": 1.89
+    },
+    "Fiorentina": {
+        "win_rate": 0.44,
+        "avg_scored": 1.47,
+        "avg_conceded": 1.14
+    },
+    "FC Porto": {
+        "win_rate": 0.738,
+        "avg_scored": 2.18,
+        "avg_conceded": 0.65
+    },
+    "PEC Zwolle": {
+        "win_rate": 0.36,
+        "avg_scored": 1.5,
+        "avg_conceded": 1.48
+    },
+    "Valenciennes FC": {
+        "win_rate": 0.285,
+        "avg_scored": 1.12,
+        "avg_conceded": 1.32
+    },
+    "P. Warszawa": {
+        "win_rate": 0.4,
+        "avg_scored": 1.23,
+        "avg_conceded": 1.02
+    },
+    "Vit\u00f3ria Guimar\u00e3es": {
+        "win_rate": 0.371,
+        "avg_scored": 1.21,
+        "avg_conceded": 1.28
+    },
+    "Korona Kielce": {
+        "win_rate": 0.329,
+        "avg_scored": 1.13,
+        "avg_conceded": 1.31
+    },
+    "H\u00e9rcules Club de F\u00fatbol": {
+        "win_rate": 0.237,
+        "avg_scored": 0.95,
+        "avg_conceded": 1.58
+    },
+    "NAC Breda": {
+        "win_rate": 0.298,
+        "avg_scored": 1.24,
+        "avg_conceded": 1.66
+    },
+    "Amadora": {
+        "win_rate": 0.267,
+        "avg_scored": 0.87,
+        "avg_conceded": 1.27
+    },
+    "Pescara": {
+        "win_rate": 0.158,
+        "avg_scored": 0.71,
+        "avg_conceded": 2.21
+    },
+    "Tondela": {
+        "win_rate": 0.235,
+        "avg_scored": 1.0,
+        "avg_conceded": 1.59
+    },
+    "RC Lens": {
+        "win_rate": 0.228,
+        "avg_scored": 0.94,
+        "avg_conceded": 1.43
+    },
+    "Jagiellonia Bia\u0142ystok": {
+        "win_rate": 0.362,
+        "avg_scored": 1.2,
+        "avg_conceded": 1.31
+    },
+    "Bournemouth": {
+        "win_rate": 0.289,
+        "avg_scored": 1.18,
+        "avg_conceded": 1.76
+    },
+    "FC Luzern": {
+        "win_rate": 0.367,
+        "avg_scored": 1.47,
+        "avg_conceded": 1.43
+    },
+    "CD Numancia": {
+        "win_rate": 0.263,
+        "avg_scored": 1.0,
+        "avg_conceded": 1.82
+    },
+    "Genoa": {
+        "win_rate": 0.351,
+        "avg_scored": 1.3,
+        "avg_conceded": 1.36
+    },
+    "Cardiff City": {
+        "win_rate": 0.184,
+        "avg_scored": 0.84,
+        "avg_conceded": 1.95
+    },
+    "Acad\u00e9mica de Coimbra": {
+        "win_rate": 0.226,
+        "avg_scored": 0.97,
+        "avg_conceded": 1.4
+    },
+    "SC Freiburg": {
+        "win_rate": 0.304,
+        "avg_scored": 1.2,
+        "avg_conceded": 1.56
+    },
+    "Boavista FC": {
+        "win_rate": 0.25,
+        "avg_scored": 0.75,
+        "avg_conceded": 1.34
+    },
+    "RCD Espanyol": {
+        "win_rate": 0.319,
+        "avg_scored": 1.11,
+        "avg_conceded": 1.43
+    },
+    "FC Lausanne-Sports": {
+        "win_rate": 0.217,
+        "avg_scored": 0.93,
+        "avg_conceded": 1.73
+    },
+    "FC Basel": {
+        "win_rate": 0.629,
+        "avg_scored": 2.16,
+        "avg_conceded": 1.09
+    },
+    "CA Osasuna": {
+        "win_rate": 0.294,
+        "avg_scored": 1.02,
+        "avg_conceded": 1.37
+    },
+    "Atl\u00e9tico Madrid": {
+        "win_rate": 0.549,
+        "avg_scored": 1.72,
+        "avg_conceded": 1.06
+    },
+    "Watford": {
+        "win_rate": 0.316,
+        "avg_scored": 1.05,
+        "avg_conceded": 1.32
+    },
+    "Levante UD": {
+        "win_rate": 0.303,
+        "avg_scored": 1.06,
+        "avg_conceded": 1.49
+    },
+    "Cagliari": {
+        "win_rate": 0.288,
+        "avg_scored": 1.17,
+        "avg_conceded": 1.43
+    },
+    "Rayo Vallecano": {
+        "win_rate": 0.347,
+        "avg_scored": 1.3,
+        "avg_conceded": 1.89
+    },
+    "Piast Gliwice": {
+        "win_rate": 0.361,
+        "avg_scored": 1.13,
+        "avg_conceded": 1.35
+    },
+    "AS Monaco": {
+        "win_rate": 0.417,
+        "avg_scored": 1.26,
+        "avg_conceded": 1.04
+    },
+    "Cracovia": {
+        "win_rate": 0.29,
+        "avg_scored": 1.12,
+        "avg_conceded": 1.4
+    },
+    "Servette FC": {
+        "win_rate": 0.286,
+        "avg_scored": 1.1,
+        "avg_conceded": 1.64
+    },
+    "FCV Dender EH": {
+        "win_rate": 0.265,
+        "avg_scored": 1.29,
+        "avg_conceded": 1.71
+    },
+    "Zag\u0142\u0119bie Lubin": {
+        "win_rate": 0.328,
+        "avg_scored": 1.15,
+        "avg_conceded": 1.29
+    },
+    "Aberdeen": {
+        "win_rate": 0.395,
+        "avg_scored": 1.2,
+        "avg_conceded": 1.17
+    },
+    "SC Beira Mar": {
+        "win_rate": 0.222,
+        "avg_scored": 1.03,
+        "avg_conceded": 1.43
+    },
+    "G\u00f3rnik \u0141\u0119czna": {
+        "win_rate": 0.267,
+        "avg_scored": 1.02,
+        "avg_conceded": 1.33
+    },
+    "Chelsea": {
+        "win_rate": 0.579,
+        "avg_scored": 1.92,
+        "avg_conceded": 0.94
+    },
+    "Liverpool": {
+        "win_rate": 0.493,
+        "avg_scored": 1.75,
+        "avg_conceded": 1.11
+    },
+    "CD Tenerife": {
+        "win_rate": 0.237,
+        "avg_scored": 1.05,
+        "avg_conceded": 1.95
+    },
+    "AC Arles-Avignon": {
+        "win_rate": 0.079,
+        "avg_scored": 0.55,
+        "avg_conceded": 1.84
+    },
+    "BSC Young Boys": {
+        "win_rate": 0.497,
+        "avg_scored": 1.85,
+        "avg_conceded": 1.3
+    },
+    "Hannover 96": {
+        "win_rate": 0.335,
+        "avg_scored": 1.32,
+        "avg_conceded": 1.71
+    },
+    "Partick Thistle F.C.": {
+        "win_rate": 0.281,
+        "avg_scored": 1.18,
+        "avg_conceded": 1.39
+    },
+    "SC Heerenveen": {
+        "win_rate": 0.393,
+        "avg_scored": 1.73,
+        "avg_conceded": 1.67
+    },
+    "West Bromwich Albion": {
+        "win_rate": 0.282,
+        "avg_scored": 1.15,
+        "avg_conceded": 1.52
+    },
+    "1. FC N\u00fcrnberg": {
+        "win_rate": 0.288,
+        "avg_scored": 1.14,
+        "avg_conceded": 1.58
+    },
+    "Middlesbrough": {
+        "win_rate": 0.184,
+        "avg_scored": 0.74,
+        "avg_conceded": 1.5
+    },
+    "Burnley": {
+        "win_rate": 0.197,
+        "avg_scored": 0.92,
+        "avg_conceded": 1.78
+    },
+    "AC Ajaccio": {
+        "win_rate": 0.193,
+        "avg_scored": 1.02,
+        "avg_conceded": 1.61
+    },
+    "\u00c9vian Thonon Gaillard FC": {
+        "win_rate": 0.296,
+        "avg_scored": 1.18,
+        "avg_conceded": 1.45
+    },
+    "RC Recreativo": {
+        "win_rate": 0.211,
+        "avg_scored": 0.89,
+        "avg_conceded": 1.5
+    },
+    "Sporting Lokeren": {
+        "win_rate": 0.349,
+        "avg_scored": 1.32,
+        "avg_conceded": 1.28
+    },
+    "Vit\u00f3ria Set\u00fabal": {
+        "win_rate": 0.234,
+        "avg_scored": 0.96,
+        "avg_conceded": 1.64
+    },
+    "Parma": {
+        "win_rate": 0.327,
+        "avg_scored": 1.2,
+        "avg_conceded": 1.39
+    },
+    "Go Ahead Eagles": {
+        "win_rate": 0.25,
+        "avg_scored": 1.09,
+        "avg_conceded": 1.88
+    },
+    "Sassuolo": {
+        "win_rate": 0.325,
+        "avg_scored": 1.24,
+        "avg_conceded": 1.48
+    },
+    "Paris Saint-Germain": {
+        "win_rate": 0.576,
+        "avg_scored": 1.87,
+        "avg_conceded": 0.88
+    },
+    "1. FC Kaiserslautern": {
+        "win_rate": 0.25,
+        "avg_scored": 1.06,
+        "avg_conceded": 1.54
+    },
+    "FC St. Pauli": {
+        "win_rate": 0.235,
+        "avg_scored": 1.03,
+        "avg_conceded": 2.0
+    },
+    "Swansea City": {
+        "win_rate": 0.326,
+        "avg_scored": 1.23,
+        "avg_conceded": 1.35
+    },
+    "Crystal Palace": {
+        "win_rate": 0.325,
+        "avg_scored": 1.04,
+        "avg_conceded": 1.32
+    },
+    "AZ": {
+        "win_rate": 0.515,
+        "avg_scored": 1.81,
+        "avg_conceded": 1.28
+    },
+    "Norwich City": {
+        "win_rate": 0.257,
+        "avg_scored": 1.05,
+        "avg_conceded": 1.66
+    },
+    "Stade Rennais FC": {
+        "win_rate": 0.365,
+        "avg_scored": 1.21,
+        "avg_conceded": 1.16
+    },
+    "S.C. Olhanense": {
+        "win_rate": 0.213,
+        "avg_scored": 0.92,
+        "avg_conceded": 1.39
+    },
+    "Athletic Club de Bilbao": {
+        "win_rate": 0.401,
+        "avg_scored": 1.37,
+        "avg_conceded": 1.36
+    },
+    "Uniao da Madeira": {
+        "win_rate": 0.206,
+        "avg_scored": 0.79,
+        "avg_conceded": 1.47
+    },
+    "FC Pa\u00e7os de Ferreira": {
+        "win_rate": 0.323,
+        "avg_scored": 1.18,
+        "avg_conceded": 1.41
+    },
+    "En Avant de Guingamp": {
+        "win_rate": 0.325,
+        "avg_scored": 1.07,
+        "avg_conceded": 1.34
+    },
+    "Cesena": {
+        "win_rate": 0.173,
+        "avg_scored": 0.89,
+        "avg_conceded": 1.63
+    },
+    "Bayer 04 Leverkusen": {
+        "win_rate": 0.504,
+        "avg_scored": 1.78,
+        "avg_conceded": 1.21
+    },
+    "Widzew \u0141\u00f3d\u017a": {
+        "win_rate": 0.267,
+        "avg_scored": 0.96,
+        "avg_conceded": 1.38
+    },
+    "Brescia": {
+        "win_rate": 0.184,
+        "avg_scored": 0.89,
+        "avg_conceded": 1.37
+    },
+    "Wis\u0142a Krak\u00f3w": {
+        "win_rate": 0.45,
+        "avg_scored": 1.38,
+        "avg_conceded": 0.98
+    },
+    "AC Bellinzona": {
+        "win_rate": 0.231,
+        "avg_scored": 1.19,
+        "avg_conceded": 2.02
+    },
+    "FC Utrecht": {
+        "win_rate": 0.386,
+        "avg_scored": 1.5,
+        "avg_conceded": 1.48
+    },
+    "UD Almer\u00eda": {
+        "win_rate": 0.253,
+        "avg_scored": 1.06,
+        "avg_conceded": 1.69
+    },
+    "FC Penafiel": {
+        "win_rate": 0.147,
+        "avg_scored": 0.85,
+        "avg_conceded": 2.03
+    },
+    "Karlsruher SC": {
+        "win_rate": 0.235,
+        "avg_scored": 0.88,
+        "avg_conceded": 1.59
+    },
+    "KAA Gent": {
+        "win_rate": 0.5,
+        "avg_scored": 1.79,
+        "avg_conceded": 1.16
+    },
+    "Lechia Gda\u0144sk": {
+        "win_rate": 0.325,
+        "avg_scored": 1.16,
+        "avg_conceded": 1.23
+    },
+    "Motherwell": {
+        "win_rate": 0.401,
+        "avg_scored": 1.33,
+        "avg_conceded": 1.47
+    },
+    "Roma": {
+        "win_rate": 0.535,
+        "avg_scored": 1.75,
+        "avg_conceded": 1.18
+    },
+    "Dundee FC": {
+        "win_rate": 0.254,
+        "avg_scored": 1.11,
+        "avg_conceded": 1.58
+    },
+    "Queens Park Rangers": {
+        "win_rate": 0.193,
+        "avg_scored": 1.01,
+        "avg_conceded": 1.75
+    },
+    "SV Zulte-Waregem": {
+        "win_rate": 0.368,
+        "avg_scored": 1.44,
+        "avg_conceded": 1.32
+    },
+    "RC Celta de Vigo": {
+        "win_rate": 0.355,
+        "avg_scored": 1.21,
+        "avg_conceded": 1.38
+    },
+    "Blackpool": {
+        "win_rate": 0.263,
+        "avg_scored": 1.45,
+        "avg_conceded": 2.05
+    },
+    "Xerez Club Deportivo": {
+        "win_rate": 0.211,
+        "avg_scored": 1.0,
+        "avg_conceded": 1.74
+    },
+    "FC Barcelona": {
+        "win_rate": 0.77,
+        "avg_scored": 2.79,
+        "avg_conceded": 0.76
+    },
+    "FC Ingolstadt 04": {
+        "win_rate": 0.294,
+        "avg_scored": 0.97,
+        "avg_conceded": 1.24
+    },
+    "Falkirk": {
+        "win_rate": 0.197,
+        "avg_scored": 0.89,
+        "avg_conceded": 1.43
+    },
+    "Olympique Lyonnais": {
+        "win_rate": 0.503,
+        "avg_scored": 1.63,
+        "avg_conceded": 1.04
+    },
+    "Feirense": {
+        "win_rate": 0.167,
+        "avg_scored": 0.9,
+        "avg_conceded": 1.63
+    },
+    "Royal Excel Mouscron": {
+        "win_rate": 0.277,
+        "avg_scored": 1.2,
+        "avg_conceded": 1.61
+    },
+    "Leix\u00f5es SC": {
+        "win_rate": 0.283,
+        "avg_scored": 0.92,
+        "avg_conceded": 1.37
+    },
+    "Leicester City": {
+        "win_rate": 0.447,
+        "avg_scored": 1.5,
+        "avg_conceded": 1.2
+    },
+    "RC Deportivo de La Coru\u00f1a": {
+        "win_rate": 0.272,
+        "avg_scored": 1.06,
+        "avg_conceded": 1.46
+    },
+    "ES Troyes AC": {
+        "win_rate": 0.145,
+        "avg_scored": 0.93,
+        "avg_conceded": 1.89
+    },
+    "1. FSV Mainz 05": {
+        "win_rate": 0.37,
+        "avg_scored": 1.34,
+        "avg_conceded": 1.34
+    },
+    "Hull City": {
+        "win_rate": 0.211,
+        "avg_scored": 0.95,
+        "avg_conceded": 1.6
+    },
+    "SV Darmstadt 98": {
+        "win_rate": 0.265,
+        "avg_scored": 1.12,
+        "avg_conceded": 1.56
+    },
+    "KAS Eupen": {
+        "win_rate": 0.167,
+        "avg_scored": 0.93,
+        "avg_conceded": 1.67
+    },
+    "Waasland-Beveren": {
+        "win_rate": 0.25,
+        "avg_scored": 1.09,
+        "avg_conceded": 1.73
+    },
+    "FC Aarau": {
+        "win_rate": 0.243,
+        "avg_scored": 1.06,
+        "avg_conceded": 1.9
+    },
+    "Lech Pozna\u0144": {
+        "win_rate": 0.517,
+        "avg_scored": 1.55,
+        "avg_conceded": 0.88
+    },
+    "Sint-Truidense VV": {
+        "win_rate": 0.263,
+        "avg_scored": 0.97,
+        "avg_conceded": 1.64
+    },
+    "FC Sion": {
+        "win_rate": 0.364,
+        "avg_scored": 1.3,
+        "avg_conceded": 1.34
+    },
+    "Legia Warszawa": {
+        "win_rate": 0.571,
+        "avg_scored": 1.7,
+        "avg_conceded": 0.85
+    },
+    "SL Benfica": {
+        "win_rate": 0.746,
+        "avg_scored": 2.29,
+        "avg_conceded": 0.75
+    },
+    "Inverness Caledonian Thistle": {
+        "win_rate": 0.361,
+        "avg_scored": 1.3,
+        "avg_conceded": 1.34
+    },
+    "St. Mirren": {
+        "win_rate": 0.229,
+        "avg_scored": 0.97,
+        "avg_conceded": 1.48
+    },
+    "Hibernian": {
+        "win_rate": 0.285,
+        "avg_scored": 1.14,
+        "avg_conceded": 1.46
+    },
+    "Estoril Praia": {
+        "win_rate": 0.391,
+        "avg_scored": 1.3,
+        "avg_conceded": 1.25
+    },
+    "VVV-Venlo": {
+        "win_rate": 0.213,
+        "avg_scored": 1.12,
+        "avg_conceded": 2.01
+    },
+    "Real Valladolid": {
+        "win_rate": 0.243,
+        "avg_scored": 1.12,
+        "avg_conceded": 1.57
+    },
+    "Dunfermline Athletic": {
+        "win_rate": 0.132,
+        "avg_scored": 1.05,
+        "avg_conceded": 2.16
+    },
+    "Polonia Bytom": {
+        "win_rate": 0.313,
+        "avg_scored": 1.11,
+        "avg_conceded": 1.3
+    },
+    "Celtic": {
+        "win_rate": 0.717,
+        "avg_scored": 2.29,
+        "avg_conceded": 0.73
+    },
+    "Naval 1\u00b0 de Maio": {
+        "win_rate": 0.244,
+        "avg_scored": 0.79,
+        "avg_conceded": 1.39
+    },
+    "KVC Westerlo": {
+        "win_rate": 0.297,
+        "avg_scored": 1.19,
+        "avg_conceded": 1.61
+    },
+    "Termalica Bruk-Bet Nieciecza": {
+        "win_rate": 0.267,
+        "avg_scored": 1.1,
+        "avg_conceded": 1.43
+    },
+    "Arka Gdynia": {
+        "win_rate": 0.222,
+        "avg_scored": 0.86,
+        "avg_conceded": 1.34
+    },
+    "RSC Anderlecht": {
+        "win_rate": 0.642,
+        "avg_scored": 2.01,
+        "avg_conceded": 0.86
+    },
+    "KV Oostende": {
+        "win_rate": 0.439,
+        "avg_scored": 1.55,
+        "avg_conceded": 1.47
+    },
+    "Willem II": {
+        "win_rate": 0.216,
+        "avg_scored": 1.09,
+        "avg_conceded": 1.99
+    },
+    "Palermo": {
+        "win_rate": 0.342,
+        "avg_scored": 1.32,
+        "avg_conceded": 1.49
+    },
+    "Uni\u00e3o de Leiria, SAD": {
+        "win_rate": 0.256,
+        "avg_scored": 0.94,
+        "avg_conceded": 1.5
+    },
+    "Elche CF": {
+        "win_rate": 0.263,
+        "avg_scored": 0.86,
+        "avg_conceded": 1.47
+    },
+    "Toulouse FC": {
+        "win_rate": 0.339,
+        "avg_scored": 1.12,
+        "avg_conceded": 1.16
+    },
+    "SM Caen": {
+        "win_rate": 0.295,
+        "avg_scored": 1.16,
+        "avg_conceded": 1.4
+    },
+    "Livorno": {
+        "win_rate": 0.171,
+        "avg_scored": 0.87,
+        "avg_conceded": 1.82
+    },
+    "Excelsior": {
+        "win_rate": 0.199,
+        "avg_scored": 1.13,
+        "avg_conceded": 1.95
+    },
+    "SpVgg Greuther F\u00fcrth": {
+        "win_rate": 0.118,
+        "avg_scored": 0.76,
+        "avg_conceded": 1.76
+    },
+    "FC Sochaux-Montb\u00e9liard": {
+        "win_rate": 0.303,
+        "avg_scored": 1.08,
+        "avg_conceded": 1.41
+    },
+    "Bologna": {
+        "win_rate": 0.259,
+        "avg_scored": 1.0,
+        "avg_conceded": 1.39
+    },
+    "Olympique de Marseille": {
+        "win_rate": 0.47,
+        "avg_scored": 1.52,
+        "avg_conceded": 1.02
+    },
+    "SC Paderborn 07": {
+        "win_rate": 0.206,
+        "avg_scored": 0.91,
+        "avg_conceded": 1.91
+    },
+    "FC Metz": {
+        "win_rate": 0.184,
+        "avg_scored": 0.82,
+        "avg_conceded": 1.61
+    },
+    "KSV Cercle Brugge": {
+        "win_rate": 0.319,
+        "avg_scored": 1.17,
+        "avg_conceded": 1.51
+    },
+    "KRC Genk": {
+        "win_rate": 0.458,
+        "avg_scored": 1.64,
+        "avg_conceded": 1.18
+    },
+    "Grasshopper Club Z\u00fcrich": {
+        "win_rate": 0.402,
+        "avg_scored": 1.5,
+        "avg_conceded": 1.39
+    },
+    "Manchester City": {
+        "win_rate": 0.576,
+        "avg_scored": 1.99,
+        "avg_conceded": 1.01
+    },
+    "FC Volendam": {
+        "win_rate": 0.206,
+        "avg_scored": 1.12,
+        "avg_conceded": 1.97
+    },
+    "AS Nancy-Lorraine": {
+        "win_rate": 0.295,
+        "avg_scored": 1.07,
+        "avg_conceded": 1.34
+    },
+    "Tottenham Hotspur": {
+        "win_rate": 0.497,
+        "avg_scored": 1.58,
+        "avg_conceded": 1.18
+    },
+    "RCD Mallorca": {
+        "win_rate": 0.353,
+        "avg_scored": 1.25,
+        "avg_conceded": 1.46
+    },
+    "UD Las Palmas": {
+        "win_rate": 0.316,
+        "avg_scored": 1.18,
+        "avg_conceded": 1.39
+    },
+    "Dijon FCO": {
+        "win_rate": 0.237,
+        "avg_scored": 1.0,
+        "avg_conceded": 1.66
+    }
+}

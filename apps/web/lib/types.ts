@@ -4,10 +4,6 @@ export interface PredictionRequest {
     match_leg: number;
     home_leg1_score?: number | null;
     away_leg1_score?: number | null;
-    home_win_rate?: number;
-    away_win_rate?: number;
-    home_elo?: number;
-    elo_difference?: number;
 }
 
 export interface PredictionResponse {

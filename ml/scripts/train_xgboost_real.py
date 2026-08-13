@@ -13,6 +13,7 @@ def main():
     if not os.path.exists(model_dir):
         os.makedirs(model_dir)
 
+    print(f"Memuat dataset dari: {raw_path}")
     df = pd.read_csv(raw_path)
     df.columns = df.columns.str.strip()
 
@@ -24,7 +25,37 @@ def main():
     df['date'] = pd.to_datetime(df['date'], errors='coerce')
     df = df.dropna(subset=['date']).sort_values('date').reset_index(drop=True)
 
-    # Feature Engineering (Statistik Historis Dinamis)
+    print("🛠️ Menghitung statistik dan profil asli tiap tim dari 26k data...")
+    
+    team_stats = {}
+    
+    # Hitung performa keseluruhan tiap tim untuk dijadikan profil dasar
+    all_teams = set(df['home_team']).union(set(df['away_team']))
+    for team in all_teams:
+        home_matches = df[df['home_team'] == team]
+        away_matches = df[df['away_team'] == team]
+        total_matches = len(home_matches) + len(away_matches)
+        
+        if total_matches < 5:
+            continue # Abaikan tim dengan data terlalu sedikit
+            
+        # Hitung kemenangan
+        home_wins = len(home_matches[home_matches['result'] == 'Home Win'])
+        away_wins = len(away_matches[away_matches['result'] == 'Away Win'])
+        total_wins = home_wins + away_wins
+        win_rate = total_wins / total_matches
+
+        # Hitung rata-rata gol
+        total_goals_scored = home_matches['home_goals'].sum() + away_matches['away_goals'].sum()
+        total_goals_conceded = home_matches['away_goals'].sum() + away_matches['home_goals'].sum()
+        
+        team_stats[team] = {
+            "win_rate": round(float(win_rate), 3),
+            "avg_scored": round(float(total_goals_scored / total_matches), 2),
+            "avg_conceded": round(float(total_goals_conceded / total_matches), 2)
+        }
+
+    # Feature Engineering Dinamis untuk Training
     team_scored, team_conceded, team_matches = {}, {}, {}
     home_avg_scored, away_avg_scored = [], []
     home_avg_conceded, away_avg_conceded = [], []
@@ -58,7 +89,6 @@ def main():
     df['match_leg'] = 1
     df['elo_difference'] = 0.0
 
-    # FITUR TANPA KEBOCORAN DATA
     feature_columns = [
         "match_leg",
         "home_avg_scored",
@@ -73,32 +103,30 @@ def main():
 
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 
-    print("🚀 Melatih ulang model XGBoost secara adil (tanpa data kebocoran)...")
+    print("🚀 Melatih model XGBoost...")
     model = xgb.XGBClassifier(
         objective="multi:softprob",
         num_class=3,
-        max_depth=4,
-        learning_rate=0.03,
+        max_depth=5,
+        learning_rate=0.05,
         n_estimators=100,
         random_state=42,
         n_jobs=-1
     )
-
     model.fit(X_train, y_train)
 
     preds = model.predict(X_test)
     acc = accuracy_score(y_test, preds)
-    print(f"🎯 Akurasi model realistis pada data uji: {acc * 100:.2f}%")
+    print(f"🎯 Akurasi model: {acc * 100:.2f}%")
 
-    # Simpan model & metadata
-    model_path = os.path.join(model_dir, "xgboost_ucl.json")
-    meta_path = os.path.join(model_dir, "feature_columns.json")
-    
-    model.save_model(model_path)
-    with open(meta_path, "w") as f:
+    # Simpan model, metadata fitur, DAN statistik tim asli
+    model.save_model(os.path.join(model_dir, "xgboost_ucl.json"))
+    with open(os.path.join(model_dir, "feature_columns.json"), "w") as f:
         json.dump(feature_columns, f)
+    with open(os.path.join(model_dir, "team_stats.json"), "w") as f:
+        json.dump(team_stats, f, indent=4)
 
-    print("📁 Model realistis baru berhasil disimpan!")
+    print("📁 Model, Metadata, dan Profil Tim Asli berhasil disimpan di ml/models/!")
 
 if __name__ == "__main__":
     main()

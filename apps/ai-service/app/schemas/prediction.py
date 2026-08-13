@@ -7,10 +7,6 @@ class PredictionRequest(BaseModel):
     match_leg: int
     home_leg1_score: Optional[int] = None
     away_leg1_score: Optional[int] = None
-    home_win_rate: float = 0.0
-    away_win_rate: float = 0.0
-    home_elo: float = 0.0
-    elo_difference: float = 0.0
 
 class PredictionResponse(BaseModel):
     home_win_prob: float
