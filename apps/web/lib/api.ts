@@ -1,7 +1,7 @@
 import { PredictionRequest, PredictionResponse } from './types';
 
 // Alamat Backend Go + Gin
-const API_BASE_URL = 'http://localhost:8080/api/v1';
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8080/api/v1';
 
 export async function fetchPrediction(data: PredictionRequest): Promise<PredictionResponse> {
     const response = await fetch(`${API_BASE_URL}/predict`, {
