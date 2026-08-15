@@ -53,3 +53,24 @@ func (c *AIClient) GetPrediction(req model.PredictionRequest) (*model.Prediction
 
 	return &result, nil
 }
+
+func (c *AIClient) SimulateMatch(req model.PredictionRequest, scenario string) (map[string]interface{}, error) {
+	jsonBody, err := json.Marshal(req)
+	if err != nil {
+		return nil, err
+	}
+
+	url := c.BaseURL + "/simulate?scenario=" + scenario
+	resp, err := c.HttpClient.Post(url, "application/json", bytes.NewBuffer(jsonBody))
+	if err != nil {
+		return nil, err
+	}
+	defer resp.Body.Close()
+
+	var result map[string]interface{}
+	if err := json.NewDecoder(resp.Body).Decode(&result); err != nil {
+		return nil, err
+	}
+
+	return result, nil
+}

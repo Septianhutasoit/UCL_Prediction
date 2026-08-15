@@ -9,3 +9,9 @@ async def predict_match(req: PredictionRequest):
     data_dict = req.model_dump()
     result = predictor.predict(data_dict)
     return PredictionResponse(**result)
+
+@router.post("/simulate")
+async def simulate_match(req: PredictionRequest, scenario_type: str ="neutral_venue"):
+    data_dict = req.model_dump()
+    result = predictor.simulate_scenario(data_dict, scenario)
+    return result

@@ -110,5 +110,40 @@ class UCLPredictor:
             "away_qualification_prob": away_qual,
             "ai_analysis": analysis
         }
+    
+    def simulate_scenario(self, data: dict, scenario_type: str):
+        # jalankan prediksi normal sebagai baseline
+        base_result = self.predict(data)
+
+        # salin data untuk modifikasi
+        mod_data = data.copy()
+        scenario_title = ""
+
+        if scenario_type == "neutral_venue":
+            scenario_title = "Skenario: Tempat Netral (Tanpa Keunggulan Kandang)"
+            # Simulasi: Kurangi sedikit kekuatan kandang
+            home_team = mod_data.get("home_team")
+            if home_team in self.team_stats:
+                # Buat tiruan data dengan avg_scored kandang diturunkan sedikit
+                pass
+                
+        elif scenario_type == "aggressive_tactic":
+            scenario_title = "Skenario: Taktik Super Agresif (All-Out Attack)"
+            # Simulasi taktik menyerang total
+            pass
+
+        # 3. Jalankan prediksi ulang dengan data skenario
+        scenario_result = self.predict(mod_data)
+        
+        # Hitung selisih probabilitas
+        diff = round(scenario_result["home_win_prob"] - base_result["home_win_prob"], 2)
+        
+        return {
+            "scenario_name": scenario_title,
+            "baseline": base_result,
+            "scenario_result": scenario_result,
+            "probability_difference": diff,
+            "explanation": f"Berdasarkan {scenario_title}, probabilitas kemenangan tim kandang berubah sebesar {diff*100:+.1f}% dibanding kondisi normal."
+        }
 
 predictor = UCLPredictor()
