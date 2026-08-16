@@ -1,7 +1,12 @@
 <div align="center">
   
-  <!-- UCL THEMED HEADER WITH 15 UCL MADRID LOGO -->
+   <!-- UCL THEMED HEADER -->
   <img src="https://readme-typing-svg.demolab.com?font=Plus+Jakarta+Sans&weight=800&size=44&duration=3000&pause=500&color=0F4C81&center=true&vCenter=true&random=false&width=700&height=80&lines=🏆+UCL+MADRID;ChampIntel+AI+Masterplan" alt="UCL Madrid Header" />
+
+  <!-- 15 UCL TROPHY LOGO (DARI FOLDER PUBLIC) -->
+  <div align="center" style="margin: 1rem 0;">
+    <img src="./public/15ucl.png" alt="15 UCL Madrid" width="400" />
+  </div>
   
   <p align="center">
     <strong>⚽ UEFA Champions League — Real Madrid AI Predictor & Analytics Engine</strong>
