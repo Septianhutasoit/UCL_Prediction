@@ -1,11 +1,14 @@
 <div align="center">
   
-<div align="center" style="margin: 1.5rem 0;">
-    <img src="./public/leagueucl.png" alt="UCL Logo" width="70" style="margin-right: 1rem;" />
-    <img src="./public/15ucl.png" alt="15 UCL Madrid" width="350" />
-    <img src="./public/sejarah.png" alt="Real Madrid" width="70" style="margin-left: 1rem;" />
-  </div>
-  -->
+  <!-- UCL THEMED HEADER -->
+  <img src="https://readme-typing-svg.demolab.com?font=Plus+Jakarta+Sans&weight=800&size=44&duration=3000&pause=500&color=0F4C81&center=true&vCenter=true&random=false&width=700&height=80&lines=🏆+UCL+MADRID;ChampIntel+AI+Masterplan" alt="UCL Madrid Header" />
+
+  <!-- UCL LOGO + REAL MADRID LOGO + 15 UCL TROPHY -->
+  <p align="center">
+    <img src="./public/leagueucl.png" alt="UCL Logo" width="70" />
+    <img src="./public/15ucl.png" alt="15 UCL Madrid" width="300" />
+    <img src="./public/sejarah.png" alt="Real Madrid" width="70" />
+  </p>
 
   <p align="center">
     <strong>⚽ UEFA Champions League — Real Madrid AI Predictor & Analytics Engine</strong>
