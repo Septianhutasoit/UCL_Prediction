@@ -3,7 +3,6 @@ export interface Team {
     logo: string;
 }
 
-
 export const teams: Team[] = [
     { name: 'Real Madrid', logo: '/team/realmadrid.png' },
     { name: 'Barcelona', logo: '/team/barca.png' },

@@ -17,7 +17,7 @@ import {
 
 const navItems = [
     { href: '/ucl-info', label: 'UCL Information', icon: Trophy },
-    { href: '/', label: 'Match Predictor', icon: Radar },
+    { href: '/predict', label: 'Match Predictor', icon: Radar },
     { href: '/predictions', label: 'Live Analysis', icon: Crosshair },
     { href: '/history', label: 'Prediction History', icon: ScrollText },
 ];
