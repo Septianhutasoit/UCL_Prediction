@@ -39,3 +39,20 @@ func (h *PredictionHandler) PredictMatch(c *gin.Context) {
 	// 3. Kembalikan hasil ke frontend
 	c.JSON(http.StatusOK, res)
 }
+
+func (h *PredictionHandler) SimulateMatch(c *gin.Context) {
+    var req model.PredictionRequest
+    if err := c.ShouldBindJSON(&req); err != nil {
+        c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+        return
+    }
+    scenario := c.DefaultQuery("scenario", "neutral_venue")
+    
+    // Panggil client ke FastAPI
+    res, err := h.Service.AIClient.SimulateMatch(req, scenario)
+    if err != nil {
+        c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+        return
+    }
+    c.JSON(http.StatusOK, res)
+}

@@ -38,6 +38,7 @@ export const teams: Team[] = [
     { name: 'Union Saint-Gilloise', logo: '/team/union.png' },
     { name: 'Villarreal', logo: '/team/villareal.png' },
     { name: 'FC København', logo: '/team/fc.png' },
+    { name: 'FC Porto', logo: '/team/porto.png' },
 ];
 
 export function getTeamLogo(name: string): string | undefined {

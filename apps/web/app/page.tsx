@@ -6,6 +6,7 @@ import { PredictionResponse } from '@/lib/types';
 import MatchHero from '@/components/MatchHero';
 import TeamPicker from '@/components/TeamPicker';
 import MatchConfigForm from '@/components/MatchConfigForm';
+import SimulationPanel from '@/components/SimulationPanel';
 import PredictionResult from '@/components/PredictionResult';
 
 type Selecting = 'home' | 'away';
@@ -109,6 +110,16 @@ export default function Home() {
         awayTeam={awayTeam}
         result={result}
       />
+
+      {result && (
+        <SimulationPanel
+          homeTeam={homeTeam}
+          awayTeam={awayTeam}
+          matchLeg={matchLeg}
+          homeLeg1Score={matchLeg === 2 ? Number(homeLeg1) : null}
+          awayLeg1Score={matchLeg === 2 ? Number(awayLeg1) : null}
+        />
+      )}
     </div>
   );
 }

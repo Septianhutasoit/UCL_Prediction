@@ -1,4 +1,4 @@
-from fastapi import APIRouter 
+from fastapi import APIRouter
 from app.schemas.prediction import PredictionRequest, PredictionResponse
 from app.services.predictor import predictor
 
@@ -11,7 +11,7 @@ async def predict_match(req: PredictionRequest):
     return PredictionResponse(**result)
 
 @router.post("/simulate")
-async def simulate_match(req: PredictionRequest, scenario_type: str ="neutral_venue"):
+async def simulate_match(req: PredictionRequest, scenario: str = "neutral_venue"):
     data_dict = req.model_dump()
     result = predictor.simulate_scenario(data_dict, scenario)
     return result

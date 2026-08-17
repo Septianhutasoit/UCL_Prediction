@@ -26,6 +26,7 @@ func main() {
 
 	r.GET("/api/v1/health", handler.HealthCheck)
 	r.POST("/api/v1/predict", predHandler.PredictMatch)
+	r.POST("/api/v1/simulate", predHandler.SimulateMatch)
 
 	r.Run(":8080")
 }

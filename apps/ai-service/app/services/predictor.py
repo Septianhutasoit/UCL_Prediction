@@ -112,38 +112,58 @@ class UCLPredictor:
         }
     
     def simulate_scenario(self, data: dict, scenario_type: str):
-        # jalankan prediksi normal sebagai baseline
+        # 1. Dapatkan prediksi normal (baseline)
         base_result = self.predict(data)
-
-        # salin data untuk modifikasi
-        mod_data = data.copy()
+        base_h = base_result["home_win_prob"]
+        
+        h_prob = base_h
+        d_prob = base_result["draw_prob"]
+        a_prob = base_result["away_win_prob"]
+        
         scenario_title = ""
-
+        explanation = ""
+        
+        # 2. Kalkulasi taktis berdasarkan skenario
         if scenario_type == "neutral_venue":
             scenario_title = "Skenario: Tempat Netral (Tanpa Keunggulan Kandang)"
-            # Simulasi: Kurangi sedikit kekuatan kandang
-            home_team = mod_data.get("home_team")
-            if home_team in self.team_stats:
-                # Buat tiruan data dengan avg_scored kandang diturunkan sedikit
-                pass
-                
+            h_prob = max(0.05, h_prob - 0.09)
+            d_prob = d_prob + 0.04
+            a_prob = a_prob + 0.05
+            explanation = f"Bermain di tempat netral menghilangkan keuntungan psikologis kandang bagi {data.get('home_team')}."
+            
         elif scenario_type == "aggressive_tactic":
             scenario_title = "Skenario: Taktik Super Agresif (All-Out Attack)"
-            # Simulasi taktik menyerang total
-            pass
+            h_prob = min(0.95, h_prob + 0.12)
+            d_prob = max(0.05, d_prob - 0.08)
+            a_prob = max(0.05, a_prob - 0.04)
+            explanation = f"Menerapkan strategi menyerang total meningkatkan intensitas gol {data.get('home_team')}."
 
-        # 3. Jalankan prediksi ulang dengan data skenario
-        scenario_result = self.predict(mod_data)
+        # Normalisasi total probabilitas agar pas 100% (1.0)
+        total = h_prob + d_prob + a_prob
+        h_prob = round(h_prob / total, 2)
+        d_prob = round(d_prob / total, 2)
+        a_prob = round(1.0 - h_prob - d_prob, 2)
+
+        scenario_result = {
+            "home_win_prob": h_prob,
+            "draw_prob": d_prob,
+            "away_win_prob": a_prob,
+            "home_qualification_prob": base_result.get("home_qualification_prob"),
+            "away_qualification_prob": base_result.get("away_qualification_prob"),
+            "ai_analysis": explanation
+        }
+
+        diff = round(h_prob - base_h, 2)
         
-        # Hitung selisih probabilitas
-        diff = round(scenario_result["home_win_prob"] - base_result["home_win_prob"], 2)
-        
+        # --- CETAK KE TERMINAL FASTAPI UNTUK CEK ---
+        print(f"🔍 DEBUG -> Base Win: {base_h} | Scenario Win: {h_prob} | Diff: {diff}")
+
         return {
             "scenario_name": scenario_title,
             "baseline": base_result,
             "scenario_result": scenario_result,
             "probability_difference": diff,
-            "explanation": f"Berdasarkan {scenario_title}, probabilitas kemenangan tim kandang berubah sebesar {diff*100:+.1f}% dibanding kondisi normal."
+            "explanation": explanation
         }
 
 predictor = UCLPredictor()
