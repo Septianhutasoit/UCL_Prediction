@@ -18,6 +18,7 @@ const partnerLogos = [
     '/sponsor/fedex.png',
     '/sponsor/standard.png',
     '/sponsor/t.png',
+    '/sponsor/nike.png'
 ];
 
 export default function Footer() {

@@ -4,6 +4,7 @@ import numpy as np
 import xgboost as xgb
 
 from app.services.shap_explainer import UCLShapExplainer
+from app.services.llm_service import llm_service
 
 def find_project_root(current_dir, target_folder="ml"):
     while current_dir != os.path.dirname(current_dir):
