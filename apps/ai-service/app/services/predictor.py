@@ -3,6 +3,8 @@ import json
 import numpy as np
 import xgboost as xgb
 
+from app.services.shap_explainer import UCLShapExplainer
+
 def find_project_root(current_dir, target_folder="ml"):
     while current_dir != os.path.dirname(current_dir):
         if os.path.exists(os.path.join(current_dir, target_folder)):
@@ -35,8 +37,12 @@ class UCLPredictor:
                 self.model = xgb.XGBClassifier()
                 self.model.load_model(self.model_path)
                 
+                # 1. Baca metadata fitur terlebih dahulu
                 with open(self.meta_path, "r") as f:
                     self.feature_columns = json.load(f)
+                    
+                # 2. Baru inisialisasi SHAP Explainer dengan feature_columns yang sudah terisi
+                self.shap_explainer = UCLShapExplainer(self.model, self.feature_columns)
                     
                 if os.path.exists(self.stats_path):
                     with open(self.stats_path, "r") as f:
@@ -76,6 +82,7 @@ class UCLPredictor:
         ]
 
         X = np.array([input_data])
+        top_factors = self.shap_explainer.explain(X)
         probs = self.model.predict_proba(X)[0]
         
         away_win_prob = float(probs[0])
@@ -108,7 +115,8 @@ class UCLPredictor:
             "away_win_prob": round(away_win_prob, 2),
             "home_qualification_prob": home_qual,
             "away_qualification_prob": away_qual,
-            "ai_analysis": analysis
+            "ai_analysis": analysis,
+            "top_factors": top_factors
         }
     
     def simulate_scenario(self, data: dict, scenario_type: str):

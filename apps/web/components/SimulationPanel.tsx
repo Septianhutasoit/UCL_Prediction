@@ -97,7 +97,7 @@ export default function SimulationPanel({
                     <div className="flex justify-between border-t border-slate-800/60 pt-2 text-xs text-slate-400">
                         <span>Win (Normal): {(scenarioResult.baseline.home_win_prob * 100).toFixed(1)}%</span>
                         <span className="font-bold text-white">
-                            Win (Skenario): {(scenarioResult.scenario_result.home_win_prob * 100).toFixed(1)}%
+                            Win (Skenario): {(scenarioResult.scenario_result.home_win_prob * 100).toFixed(1)}%{' '}
                             <span className={scenarioResult.probability_difference >= 0 ? 'text-emerald-400 ml-1.5' : 'text-red-400 ml-1.5'}>
                                 ({scenarioResult.probability_difference >= 0 ? '+' : ''}{(scenarioResult.probability_difference * 100).toFixed(1)}%)
                             </span>

@@ -2,6 +2,7 @@ import React from 'react';
 import { PredictionResponse } from '@/lib/types';
 import Logo from '@/components/Logo';
 import { getTeamLogo } from '@/lib/teams';
+import ShapFactors  from './shap-factors';
 
 interface PredictionResultProps {
     homeTeam: string;
@@ -81,6 +82,9 @@ export default function PredictionResult({ homeTeam, awayTeam, result }: Predict
                     {result.ai_analysis}
                 </p>
             </div>
+            {result.top_factors && result.top_factors.length > 0 && (
+                <ShapFactors factors={result.top_factors} />
+            )}
         </div>
     );
 }

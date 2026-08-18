@@ -1,5 +1,5 @@
 from pydantic import BaseModel
-from typing import Optional
+from typing import Optional, List, Dict, Any
 
 class PredictionRequest(BaseModel):
     home_team: str
@@ -15,3 +15,4 @@ class PredictionResponse(BaseModel):
     home_qualification_prob: Optional[float] = None
     away_qualification_prob: Optional[float] = None
     ai_analysis: str
+    top_factors: Optional[List[Dict[str, Any]]] = None  

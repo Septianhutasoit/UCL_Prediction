@@ -6,6 +6,12 @@ export interface PredictionRequest {
     away_leg1_score?: number | null;
 }
 
+export interface ShapFactor {
+    feature: string;
+    value: number;
+    impact: string;
+}
+
 export interface PredictionResponse {
     home_win_prob: number;
     draw_prob: number;
@@ -13,4 +19,5 @@ export interface PredictionResponse {
     home_qualification_prob?: number | null;
     away_qualification_prob?: number | null;
     ai_analysis: string;
+    top_factors?: ShapFactor[];
 }
