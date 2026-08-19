@@ -67,19 +67,26 @@ class UCLPredictor:
         home_team = data.get("home_team")
         away_team = data.get("away_team")
 
-        # Ambil statistik historis asli dari team_stats.json (jika ada, jika tidak pakai nilai rata-rata liga)
+        # Ambil statistik historis asli dari team_stats.json
         h_stats = self.team_stats.get(home_team, {"avg_scored": 1.5, "avg_conceded": 1.0, "win_rate": 0.5})
         a_stats = self.team_stats.get(away_team, {"avg_scored": 1.3, "avg_conceded": 1.2, "win_rate": 0.4})
 
+        # Menggabungkan win_rate dan selisih gol bersih untuk merepresentasikan kekuatan tim
+        h_power = (h_stats["win_rate"] * 2.0) + (h_stats["avg_scored"] - h_stats["avg_conceded"])
+        a_power = (a_stats["win_rate"] * 2.0) + (a_stats["avg_scored"] - a_stats["avg_conceded"])
+        
+        # Skala perbedaan kekuatan (dibuat menyerupai selisih Elo rating)
+        calculated_elo_diff = round((h_power - a_power) * 100, 2)
+        # -------------------------------------------------------------------
+
         # Susun input sesuai urutan fitur saat training
-        # feature_columns = ["match_leg", "home_avg_scored", "home_avg_conceded", "away_avg_scored", "away_avg_conceded", "elo_difference"]
         input_data = [
             float(data.get("match_leg", 1)),
             float(h_stats["avg_scored"]),
             float(h_stats["avg_conceded"]),
             float(a_stats["avg_scored"]),
             float(a_stats["avg_conceded"]),
-            float(data.get("elo_difference", 0.0))
+            float(calculated_elo_diff) # <--- Sekarang menggunakan nilai dinamis yang valid!
         ]
 
         X = np.array([input_data])
@@ -90,26 +97,31 @@ class UCLPredictor:
         draw_prob = float(probs[1])
         home_win_prob = float(probs[2])
 
-        analysis = (
-            f"Analisis XGBoost (Data Historis Asli): "
-            f"Berdasarkan rekam jejak performa gol ({home_team} mencetak rata-rata {h_stats['avg_scored']} gol/laga vs {away_team} {a_stats['avg_scored']} gol/laga), "
-            f"peluang kemenangan kandang diperkirakan {home_win_prob*100:.1f}%, Seri {draw_prob*100:.1f}%, dan kemenangan tandang {away_win_prob*100:.1f}%."
-        )
-
         home_qual = None
         away_qual = None
         if data.get("match_leg") == 2:
             h_agg = data.get("home_leg1_score", 0) or 0
             a_agg = data.get("away_leg1_score", 0) or 0
             
-            # Kalkulasi kelolosan berbasis probabilitas menang + agregat leg 1
             agg_diff = h_agg - a_agg
             home_qual = round(0.5 + (home_win_prob - away_win_prob) * 0.3 + (agg_diff * 0.1), 2)
             home_qual = max(0.05, min(0.95, home_qual))
             away_qual = round(1.0 - home_qual, 2)
-            
-            analysis += f" Mengingat skor Leg 1 ({home_team} {h_agg} - {a_agg} {away_team}), agregat sementara memengaruhi peluang kelolosan menjadi {home_qual*100:.1f}% untuk {home_team} dan {away_qual*100:.1f}% untuk {away_team}."
 
+        # Buat konteks agregat untuk LLM
+        agg_text = ""
+        if data.get("match_leg") == 2:
+            h_agg = data.get("home_leg1_score", 0) or 0
+            a_agg = data.get("away_leg1_score", 0) or 0
+            agg_text = f"Skor Leg 1: {home_team} {h_agg} - {a_agg} {away_team}. Peluang lolos: {home_team} ({home_qual*100:.1f}%) vs {away_team} ({away_qual*100:.1f}%)."
+
+        # Panggil Qwen LLM untuk merangkum analisis secara natural
+        probs_dict = {
+            "home_win_prob": home_win_prob,
+            "draw_prob": draw_prob,
+            "away_win_prob": away_win_prob
+        }
+        analysis = llm_service.generate_explanation(home_team, away_team, probs_dict, top_factors, data.get("match_leg", 1), agg_text)
         return {
             "home_win_prob": round(home_win_prob, 2),
             "draw_prob": round(draw_prob, 2),
@@ -174,5 +186,6 @@ class UCLPredictor:
             "probability_difference": diff,
             "explanation": explanation
         }
+    
 
 predictor = UCLPredictor()

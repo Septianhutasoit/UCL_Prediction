@@ -1,63 +1,27 @@
- import torch
-from transformers import AutoModelForCausalLM, AutoTokenizer, pipeline
-
 class LLMExplanationService:
     def __init__(self):
-        self.pipe = None
-        try:
-            print("Memuat model Qwen2.5-1.5B-Instruct untuk penjelasan AI (mohon tunggu)...")
-            model_id = "Qwen/Qwen2.5-1.5B-Instruct"
-            
-            # Load tokenizer & model (menggunakan float16 agar ramah RAM 16GB)
-            self.tokenizer = AutoTokenizer.from_pretrained(model_id)
-            self.model = AutoModelForCausalLM.from_pretrained(
-                model_id,
-                torch_dtype=torch.float16 if torch.cuda.is_available() else torch.float32,
-                device_map="auto"
-            )
-            
-            self.pipe = pipeline(
-                "text-generation",
-                model=self.model,
-                tokenizer=self.tokenizer,
-                max_new_tokens=180,
-                temperature=0.7,
-            )
-            print(">>> Model Qwen LLM BERHASIL dimuat untuk analisis taktik! <<<")
-        except Exception as e:
-            print(f"⚠️ Gagal memuat Qwen LLM (menggunakan template fallback): {e}")
+        print(">>> LLM Explanation Service aktif (Mode Ringan & Cepat) <<<")
 
     def generate_explanation(self, home_team: str, away_team: str, probs: dict, top_factors: list, leg: int, agg_text: str = "") -> str:
-        if not self.pipe:
-            # Fallback jika model gagal di-load (misal kendala RAM/koneksi)
-            return f"Analisis AI (Template): Pertandingan antara {home_team} dan {away_team} (Leg {leg}) menghasilkan peluang menang kandang {probs['home_win_prob']*100:.1f}%. {agg_text}"
+        home_pct = f"{probs['home_win_prob']*100:.1f}%"
+        draw_pct = f"{probs['draw_prob']*100:.1f}%"
+        away_pct = f"{probs['away_win_prob']*100:.1f}%"
 
-        prompt = f"""
-        Kamu adalah analis taktik sepak bola UEFA Champions League. Buatlah ringkasan analisis pertandingan yang objektif, profesional, dan mengalir dalam bahasa Indonesia berdasarkan data berikut:
-        - Pertandingan: {home_team} vs {away_team} (Leg {leg})
-        - Probabilitas XGBoost: {home_team} Menang ({probs['home_win_prob']*100:.1f}%), Seri ({probs['draw_prob']*100:.1f}%), {away_team} Menang ({probs['away_win_prob']*100:.1f}%)
-        - Faktor Penentu Utama (SHAP): {', '.join([f"{f['feature']} ({f['impact']})" for f in top_factors])}
-        - Konteks Agregat: {agg_text}
+        # Format faktor SHAP menjadi kalimat yang mudah dibaca
+        factors_desc = ""
+        if top_factors:
+            primary_factor = top_factors[0]['feature']
+            impact_type = "mendukung positif" if top_factors[0]['impact'] == 'positif' else "memberikan tekanan negatif"
+            factors_desc = f"Faktor paling dominan yang memengaruhi jalannya laga adalah {primary_factor} yang {impact_type}."
 
-        Aturan: Jangan membuat statistik baru di luar data ini. Berikan penjelasan taktis yang ringkas dan padat.
-        """
-
-        messages = [
-            {"role": "system", "content": "Kamu adalah analis taktik sepak bola profesional."},
-            {"role": "user", "content": prompt}
-        ]
-        
-        text = self.tokenizer.apply_chat_template(
-            messages,
-            tokenize=False,
-            add_generation_prompt=True
+        analysis = (
+            f"Analisis Taktikal AI (ChampIntel Engine): "
+            f"Berdasarkan pemodelan probabilitas XGBoost untuk leg ke-{leg}, "
+            f"laga antara {home_team} dan {away_team} menunjukkan estimasi peluang kemenangan kandang {home_pct}, "
+            f"seri {draw_pct}, dan kemenangan tandang {away_pct}. "
+            f"{factors_desc} {agg_text}"
         )
-
-        outputs = self.pipe(text)
-        generated_text = outputs[0]["generated_text"]
         
-        # Ambil hasil setelah role assistant
-        response = generated_text.split("assistant\n")[-1].strip()
-        return response
+        return analysis
 
 llm_service = LLMExplanationService()
