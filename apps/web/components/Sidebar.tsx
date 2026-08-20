@@ -10,17 +10,17 @@ import {
     Radar,
     Crosshair,
     ScrollText,
-    MessageSquareCode,
     PanelLeftClose,
     PanelLeftOpen,
     Search,
+    Brain,
 } from 'lucide-react';
 
 const navItems = [
     { href: '/ucl-info', label: 'UCL Information', icon: Trophy },
     { href: '/predict', label: 'Match Predictor', icon: Radar },
     { href: '/predictions', label: 'Live Analysis', icon: Crosshair },
-    { href: '/analyst', label: 'Ai Analyst Agent', icon: MessageSquareCode },
+    { href: '/analyst', label: 'Ai Analyst Agent', icon: Brain },
     { href: '/history', label: 'Prediction History', icon: ScrollText },
 ];
 

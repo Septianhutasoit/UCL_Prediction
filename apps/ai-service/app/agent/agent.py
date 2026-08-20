@@ -1,11 +1,12 @@
-from app.agent.tools import tool_predict_match, tool_get_match_stats, tool_simulate_what_if
-
-class ChampIntelAgent:
-    def __init__(self):
-        print(">>> ChampIntel AI Agent (Orchestrator) siap beroperasi! <<<")
-
-    def run_agent(self, user_query: str, home_team: str, away_team: str, match_leg: int = 1, home_leg1_score: int = 0, away_leg1_score: int = 0):
+def run_agent(self, user_query: str, home_team: str, away_team: str, match_leg: int = 1, home_leg1_score: int = 0, away_leg1_score: int = 0):
         query = user_query.lower()
+        
+        # Deteksi otomatis leg dari kalimat user
+        detected_leg = match_leg
+        if "leg 1" in query or "leg pertama" in query:
+            detected_leg = 1
+        elif "leg 2" in query or "leg kedua" in query:
+            detected_leg = 2
         
         # 1. Deteksi Skenario What-if (Tempat Netral)
         if "netral" in query or "tanpa kandang" in query:
@@ -27,11 +28,11 @@ class ChampIntelAgent:
                 "data": sim_res
             }
 
-        # 3. Default Intent: Panggil tool prediksi utama & analisis taktik
-        prediction_res = tool_predict_match(home_team, away_team, match_leg, home_leg1_score, away_leg1_score)
+        # 3. Default Intent: Panggil tool prediksi utama dengan leg yang terdeteksi
+        prediction_res = tool_predict_match(home_team, away_team, detected_leg, home_leg1_score, away_leg1_score)
         
         response_text = (
-            f"🤖 Berdasarkan analisis Agent untuk laga {home_team} vs {away_team} (Leg {match_leg}):\n\n"
+            f"🤖 Berdasarkan analisis Agent untuk laga {home_team} vs {away_team} (Leg {detected_leg}):\n\n"
             f"• Peluang Menang ({home_team}): {prediction_res['home_win_prob']*100:.1f}%\n"
             f"• Peluang Seri: {prediction_res['draw_prob']*100:.1f}%\n"
             f"• Peluang Menang ({away_team}): {prediction_res['away_win_prob']*100:.1f}%\n\n"
@@ -43,5 +44,3 @@ class ChampIntelAgent:
             "response": response_text,
             "data": prediction_res
         }
-
-agent = ChampIntelAgent()
