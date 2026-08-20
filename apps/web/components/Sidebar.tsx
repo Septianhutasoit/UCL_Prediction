@@ -10,6 +10,7 @@ import {
     Radar,
     Crosshair,
     ScrollText,
+    MessageSquareCode,
     PanelLeftClose,
     PanelLeftOpen,
     Search,
@@ -19,6 +20,7 @@ const navItems = [
     { href: '/ucl-info', label: 'UCL Information', icon: Trophy },
     { href: '/predict', label: 'Match Predictor', icon: Radar },
     { href: '/predictions', label: 'Live Analysis', icon: Crosshair },
+    { href: '/analyst', label: 'Ai Analyst Agent', icon: MessageSquareCode },
     { href: '/history', label: 'Prediction History', icon: ScrollText },
 ];
 

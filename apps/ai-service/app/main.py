@@ -1,6 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from app.routes.predict import router as predict_router
+from app.routes.agent_router import router as agent_router
 
 app = FastAPI(
     title="Uefa Champions League AI Service",
@@ -22,3 +23,4 @@ async def health_check():
     return {"status": "healthy", "service": "ai-service"}
 
 app.include_router(predict_router)
+app.include_router(agent_router)
