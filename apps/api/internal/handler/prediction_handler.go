@@ -56,3 +56,18 @@ func (h *PredictionHandler) SimulateMatch(c *gin.Context) {
     }
     c.JSON(http.StatusOK, res)
 }
+
+func (h *PredictionHandler) GetHistory(c *gin.Context) {
+	if h.Service.Repo == nil {
+		c.JSON(http.StatusServiceUnavailable, gin.H{"error": "Database belum terhubung"})
+		return
+	}
+
+	list, err := h.Service.Repo.GetAllPredictions()
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Gagal mengambil riwayat: " + err.Error()})
+		return
+	}
+
+	c.JSON(http.StatusOK, list)
+}

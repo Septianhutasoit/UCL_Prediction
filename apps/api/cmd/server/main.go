@@ -22,6 +22,11 @@ func main() {
 
 	// Koneksi ke Database PostgreSQL Supabase
 	dbURL := os.Getenv("DB_URL")
+	
+	// --- TAMBAHKAN BARIS INI UNTUK MENGECEK APA YANG DIBACA GO ---
+	log.Printf("🔍 DEBUG - Nilai DB_URL dari .env: '%s'", dbURL)
+	// -------------------------------------------------------------
+
 	var predRepo *repository.PredictionRepository
 	if dbURL != "" {
 		var err error
@@ -32,7 +37,7 @@ func main() {
 			log.Println(">>> 🚀 Berhasil terhubung ke Database PostgreSQL (Supabase)! <<<")
 		}
 	} else {
-		log.Println("⚠️ Warning: DB_URL tidak ditemukan di file .env")
+		log.Println("⚠️ Warning: DB_URL kosong atau tidak ditemukan di file .env")
 	}
 
 	aiServiceURL := os.Getenv("AI_SERVICE_URL")
@@ -47,6 +52,7 @@ func main() {
 
 	// --- ROUTES ---
 	r.GET("/api/v1/health", handler.HealthCheck)
+	r.GET("/api/v1/history", predHandler.GetHistory)
 	r.POST("/api/v1/predict", predHandler.PredictMatch)
 	r.POST("/api/v1/simulate", predHandler.SimulateMatch)
 

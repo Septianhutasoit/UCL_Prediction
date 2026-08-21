@@ -18,3 +18,18 @@ export async function fetchPrediction(data: PredictionRequest): Promise<Predicti
 
     return response.json();
 }
+
+export async function fetchHistory() {
+    const response = await fetch(`${API_BASE_URL}/history`, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+    });
+
+    if (!response.ok) {
+        throw new Error('Gagal mengambil riwayat dari database Supabase');
+    }
+
+    return response.json();
+}
