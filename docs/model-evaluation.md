@@ -1,18 +1,18 @@
 # Model Evaluation Report — ChampIntel XGBoost
 
-## 1. Overview Dataset
+## 1. Overview Dataset & Temporal Split
 - **Total Sampel:** 25,979 baris pertandingan historis.
-- **Total Klub Terprofilkan:** 296 klub (profil win rate & rata-rata gol).
-- **Fitur Utama:** Rata-rata gol memasukkan & kebobolan (home/away), status leg, dan selisih kekuatan (Elo).
-- **Target Kelas:** 0 (Away Win), 1 (Draw), 2 (Home Win).
+- **Training Set (Masa Lalu):** 20,783 laga.
+- **Test Set (Masa Depan):** 5,196 laga.
+- **Total Klub Terprofilkan:** 296 klub Eropa.
 
-## 2. Metrik Evaluasi Model (Test Set 20%)
+## 2. Metrik Evaluasi Model (Temporal Test Set)
 | Metrik Evaluasi | Nilai | Penjelasan Akademis |
 | :--- | :--- | :--- |
-| **Accuracy** | `50.83%` | Persentase ketepatan tebakan kelas hasil laga |
-| **Log Loss** | `1.0008` | Mengukur tingkat keyakinan probabilitas model (makin kecil makin baik) |
-| **Brier Score** | `0.5977` | Mengukur kalibrasi kesalahan prediksi persentase (makin mendekati 0 makin sempurna) |
-| **Macro F1-Score** | `0.3665` | Menilai keseimbangan performa model pada kelas minoritas (Draw) |
+| **Accuracy** | `50.08%` | Persentase ketepatan tebakan kelas hasil laga |
+| **Log Loss** | `1.0052` | Mengukur tingkat keyakinan probabilitas (makin kecil makin baik) |
+| **Brier Score** | `0.6007` | Mengukur kalibrasi kesalahan prediksi persentase (makin mendekati 0 makin sempurna) |
+| **Macro F1-Score** | `0.3553` | Menilai keseimbangan performa model pada kelas minoritas (Draw) |
 
-## 3. Kesimpulan Validasi
-Model XGBoost dilatih secara adil tanpa adanya *data leakage*. Nilai *Log Loss* dan *Brier Score* membuktikan bahwa model ChampIntel menghasilkan estimasi persentase yang reliabel dan dapat dipertanggungjawabkan secara ilmiah untuk mendukung keputusan AI Agent.
+## 3. Validasi Anti Data-Leakage
+Model XGBoost dilatih secara *temporal split* dengan fitur *ELO Difference* dinamis. Nilai *Log Loss* dan *Brier Score* membuktikan bahwa estimasi persentase probabilitas ChampIntel terkalibrasi secara objektif dan reliabel.
