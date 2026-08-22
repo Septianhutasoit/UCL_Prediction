@@ -1,3 +1,13 @@
 .env
 .env.local
 .env.*.local 
+
+# Abaikan file model besar (>100MB) agar bisa push ke GitHub
+*.safetensors
+*.bin
+*.pt
+apps/ai-service/models/ucl_qwen_adapter/*.safetensors
+
+# Abaikan folder cache python
+**/__pycache__/
+*.pyc
