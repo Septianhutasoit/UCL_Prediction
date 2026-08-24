@@ -1,48 +1,9 @@
 import os
 
-# Cek ketersediaan PyTorch dan Transformers secara aman tanpa membuat server crash
-try:
-    import torch
-    from transformers import AutoModelForCausalLM, AutoTokenizer
-    TORCH_AVAILABLE = True
-except ImportError:
-    TORCH_AVAILABLE = False
-
 
 class LLMExplanationService:
     def __init__(self):
-        base_dir = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-        self.model_dir = os.path.join(base_dir, "models", "ucl_qwen_adapter")
-        
-        self.model = None
-        self.tokenizer = None
-        
-        if TORCH_AVAILABLE:
-            self.device = "cuda" if torch.cuda.is_available() else "cpu"
-            self.load_fine_tuned_model()
-        else:
-            print(">>> ℹ️ LLM Explanation Service aktif (Mode Ringan & Cepat) <<<")
-
-    def load_fine_tuned_model(self):
-        try:
-            if os.path.exists(self.model_dir) and os.path.exists(os.path.join(self.model_dir, "model.safetensors")):
-                print(f">>> 🤖 Memuat Qwen 2.5 Fine-Tuned dari: {self.model_dir} ({self.device}) <<<")
-                self.tokenizer = AutoTokenizer.from_pretrained(self.model_dir)
-                torch_dtype = torch.float16 if self.device == "cuda" else torch.float32
-                self.model = AutoModelForCausalLM.from_pretrained(
-                    self.model_dir,
-                    torch_dtype=torch_dtype,
-                    device_map="auto" if self.device == "cuda" else None,
-                    low_cpu_mem_usage=True
-                )
-                if self.device == "cpu":
-                    self.model.to("cpu")
-                print(">>> ✅ Model Qwen 2.5 Fine-Tuned (ucl_qwen_adapter) BERHASIL aktif! <<<")
-            else:
-                print(">>> ℹ️ Folder ucl_qwen_adapter belum lengkap, beralih ke Mode Cepat. <<<")
-        except Exception as e:
-            print(f"⚠️ Gagal memuat model neural ({e}), menggunakan Mode Cepat.")
-            self.model = None
+        print(">>> 🎙️ ChampIntel Tactical Commentary Engine AKTIF (Mode Super Cepat & Stabil) <<<")
 
     def generate_explanation(
         self, 
@@ -53,56 +14,60 @@ class LLMExplanationService:
         leg: int, 
         agg_text: str = ""
     ) -> str:
-        h_prob = f"{probs['home_win_prob']*100:.1f}%"
-        d_prob = f"{probs['draw_prob']*100:.1f}%"
-        a_prob = f"{probs['away_win_prob']*100:.1f}%"
+        """Menghasilkan analisis taktik mendalam, objektif, dan berbobot komentator profesional."""
+        h_prob = probs.get("home_win_prob", 0.5)
+        d_prob = probs.get("draw_prob", 0.25)
+        a_prob = probs.get("away_win_prob", 0.25)
+
+        h_pct = f"{h_prob*100:.1f}%"
+        d_pct = f"{d_prob*100:.1f}%"
+        a_pct = f"{a_prob*100:.1f}%"
+
+        factor_names = [f["feature"] for f in top_factors[:2]] if top_factors else ["kualitas taktik"]
+        primary_factor = factor_names[0] if factor_names else "keseimbangan permainan"
+
+        # 1. Analisis Taktikal Multi-Sudut Pandang
+        if h_prob >= a_prob + 0.10:
+            intro = (
+                f"Dalam duel Leg ke-{leg} ini, {home_team} memegang inisiatif taktikal dengan keunggulan "
+                f"probabilitas kemenangan sebesar {h_pct}, berbanding {a_pct} untuk {away_team} dan {d_pct} potensi seri."
+            )
+            tactics = (
+                f"Dominasi {home_team} didorong kuat oleh faktor {primary_factor}, yang memungkinkan mereka "
+                f"menerapkan high-pressing intensif dan mengontrol tempo permainan di lini tengah sejak menit awal."
+            )
+            defense = (
+                f"{away_team} diproyeksikan akan dipaksa bermain lebih reaktif dengan blok pertahanan rendah, "
+                f"sembari mencari celah transisi serangan balik cepat."
+            )
+        elif a_prob >= h_prob + 0.10:
+            intro = (
+                f"Meskipun bertindak sebagai tim tamu pada Leg ke-{leg}, {away_team} justru menunjukkan proyeksi "
+                f"keunggulan yang lebih dominan ({a_pct} vs {h_pct} milik {home_team})."
+            )
+            tactics = (
+                f"Efektivitas {primary_factor} menjadi pembeda krusial, di mana struktur transisi {away_team} "
+                f"sangat berbahaya dalam mengeksploitasi ruang di sepertiga akhir pertahanan tuan rumah."
+            )
+            defense = (
+                f"{home_team} wajib menjaga kedisiplinan rest-defense agar tidak kecolongan gol tandang yang fatal."
+            )
+        else:
+            intro = (
+                f"Pertandingan Leg ke-{leg} antara {home_team} dan {away_team} diproyeksikan berlangsung sangat ketat "
+                f"dan berimbang, dengan estimasi probabilitas {home_team} {h_pct}, seri {d_pct}, dan {away_team} {a_pct}."
+            )
+            tactics = (
+                f"Kedua tim memiliki margin kekuatan yang sangat tipis, di mana pengaruh {primary_factor} "
+                f"akan menjadi kunci penentu dalam memecah kebuntuan duel lini sentral."
+            )
+            defense = (
+                f"Fokus mental dan efisiensi konversi peluang akan menjadi penentu tipis siapa yang keluar sebagai pemenang."
+            )
+
+        agg_summary = f" {agg_text}" if agg_text else ""
         
-        factor_desc = top_factors[0]['feature'] if top_factors else "keseimbangan taktik"
-
-        user_prompt = (
-            f"Pertandingan: {home_team} vs {away_team}. Leg: {leg}. "
-            f"Probabilitas: Home Win {h_prob}, Draw {d_prob}, Away Win {a_prob}. "
-            f"Faktor Kunci: {factor_desc}. {agg_text}"
-        )
-
-        # 1. JIKA MODEL QWEN & TORCH TERPASANG (Neural AI Mode)
-        if self.model is not None and self.tokenizer is not None and TORCH_AVAILABLE:
-            try:
-                messages = [
-                    {
-                        "role": "system",
-                        "content": "Kamu adalah analis taktik sepak bola UEFA Champions League yang objektif, presisi terhadap data probabilitas, dan berbasis analisis numerik."
-                    },
-                    {"role": "user", "content": user_prompt}
-                ]
-                
-                text = self.tokenizer.apply_chat_template(messages, tokenize=False, add_generation_prompt=True)
-                model_inputs = self.tokenizer([text], return_tensors="pt").to(self.device)
-
-                with torch.no_grad():
-                    generated_ids = self.model.generate(
-                        **model_inputs,
-                        max_new_tokens=150,
-                        temperature=0.3,
-                        do_sample=True,
-                        top_p=0.9
-                    )
-
-                generated_ids = [
-                    output_ids[len(input_ids):] for input_ids, output_ids in zip(model_inputs.input_ids, generated_ids)
-                ]
-
-                response = self.tokenizer.batch_decode(generated_ids, skip_special_tokens=True)[0]
-                return response.strip()
-            except Exception as e:
-                print(f"⚠️ Error saat neural generation ({e}), memakai fallback.")
-
-        # 2. FALLBACK CEPAT (Respon Instan Tanpa Beban Laptop)
-        return (
-            f"Berdasarkan kalkulasi probabilitas XGBoost untuk Leg ke-{leg}, "
-            f"{home_team} memiliki estimasi peluang menang {h_prob}, seri {d_prob}, dan {away_team} {a_prob}. "
-            f"Faktor dominan yang memengaruhi prediksi ini adalah {factor_desc}. {agg_text}"
-        )
+        return f"{intro} {tactics} {defense}{agg_summary}"
 
 
 llm_service = LLMExplanationService()

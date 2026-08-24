@@ -1,9 +1,9 @@
 from fastapi import APIRouter
 from pydantic import BaseModel
-from typing import Optional, Lis, Dict, Any
+from typing import Optional, List, Dict, Any
 from app.agent.agent import agent
 
-router = APIRouter()
+router = APIRouter(prefix="/agent", tags=["AI Agent"])
 
 class ChatMessage(BaseModel):
     role: str
@@ -27,7 +27,7 @@ def query_agent(req: AgentQueryRequest):
         "away_team": req.away_team,
         "match_leg": req.match_leg,
         "home_leg1_score": req.home_leg1_score or 0,
-        "away_leg1_score": req.away_leg1_score or 0,  # <-- BUG away_leg1_score DIPERBAIKI
+        "away_leg1_score": req.away_leg1_score or 0,
     }
 
     # Format riwayat chat menjadi list of dict sederhana

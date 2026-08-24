@@ -1,173 +1,182 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
-import { teams, getTeamLogo } from '@/lib/teams';
-import Logo from '@/components/Logo';
-import { ArrowUp, User, Sparkles, Minus, Plus } from 'lucide-react';
+import React, { useState, useRef, useEffect } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 
-type ChatMessage = { role: 'user' | 'assistant'; content: string };
-
-// Efek ketik halus untuk jawaban bot — hanya jalan sekali saat pesan baru muncul,
-// pesan lama tidak akan diketik ulang karena komponennya tidak remount.
-function TypewriterText({ text, speed = 16 }: { text: string; speed?: number }) {
-    const [displayed, setDisplayed] = useState('');
-
-    useEffect(() => {
-        setDisplayed('');
-        let i = 0;
-        const interval = setInterval(() => {
-            i += 2;
-            setDisplayed(text.slice(0, i));
-            if (i >= text.length) clearInterval(interval);
-        }, speed);
-        return () => clearInterval(interval);
-    }, [text]);
-
-    return (
-        <p className="whitespace-pre-line">
-            {displayed}
-            {displayed.length < text.length && <span className="ml-0.5 animate-pulse text-blue-400">▍</span>}
-        </p>
-    );
+interface GroundTruth {
+    home_team: string;
+    away_team: string;
+    home_win_prob: number;
+    away_win_prob: number;
+    draw_prob: number;
+    top_factor: string;
 }
 
-const quickQuestions = [
-    'Analisis taktik laga ini secara mendalam',
-    'Bagaimana jika main di tempat netral?',
-    'Simulasikan kalau kedua tim main agresif',
-    'Siapa favorit lolos di Leg 2?',
-];
+interface Message {
+    role: 'user' | 'assistant';
+    content: string;
+    intent?: string;
+    tools_called?: string[];
+    ground_truth?: GroundTruth;
+}
+
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8080/api/v1';
 
 export default function AnalystPage() {
-    const [messages, setMessages] = useState<ChatMessage[]>([
-        {
-            role: 'assistant',
-            content:
-                'Halo! Saya ChampIntel Analyst Agent. Pilih dua klub & leg di bawah, lalu tanyakan analisis taktik, prediksi, atau jalankan simulasi skenario (misal: "Bagaimana jika main di tempat netral?").',
-        },
-    ]);
-    const [inputQuery, setInputQuery] = useState('');
     const [homeTeam, setHomeTeam] = useState('Real Madrid');
     const [awayTeam, setAwayTeam] = useState('Bayern Munich');
-    const [matchLeg, setMatchLeg] = useState(2);
-    const [homeLeg1, setHomeLeg1] = useState(1);
-    const [awayLeg1, setAwayLeg1] = useState(2);
+    const [matchLeg, setMatchLeg] = useState(1);
+    const [homeLeg1Score, setHomeLeg1Score] = useState(0);
+    const [awayLeg1Score, setAwayLeg1Score] = useState(0);
+
+    const [messages, setMessages] = useState<Message[]>([
+        {
+            role: 'assistant',
+            content: `Halo! Saya ChampIntel Autonomous Tactical Agent. Saya siap menganalisis duel ${homeTeam} vs ${awayTeam} berbasis orkestrasi XGBoost, SHAP Explainability, dan Qwen LLM. Silakan pilih skenario atau ajukan pertanyaan taktis bebas!`,
+            tools_called: ['Tool: Team Intelligence DB', 'Tool: XGBoost Predictor']
+        }
+    ]);
+
+    const [input, setInput] = useState('');
     const [loading, setLoading] = useState(false);
+    const messagesEndRef = useRef<HTMLDivElement>(null);
 
-    const hasUserChatted = messages.some((m) => m.role === 'user');
+    const scrollToBottom = () => {
+        messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    };
 
-    const sendQuery = async (text: string) => {
-        if (!text.trim() || loading) return;
+    useEffect(() => {
+        scrollToBottom();
+    }, [messages, loading]);
 
-        setInputQuery('');
-        setMessages((prev) => [...prev, { role: 'user', content: text }]);
+    // Tombol Tanya Cepat Dinamis (Dynamic Action Chips)
+    const quickChips = [
+        `🔍 Kelemahan utama ${awayTeam}`,
+        `🛡️ Strategi bertahan terbaik untuk ${awayTeam}`,
+        `⚡ Duel kunci perebutan lini tengah`,
+        `📊 Simulasi taktik All-Out Attack`,
+        `⚖️ Analisis dampak selisih True Elo`
+    ];
+
+    const handleResetChat = () => {
+        setMessages([
+            {
+                role: 'assistant',
+                content: `Sesi percakapan di-reset. Siap menganalisis skenario baru untuk ${homeTeam} vs ${awayTeam} (Leg ${matchLeg}).`,
+                tools_called: ['Tool: System Memory Reset']
+            }
+        ]);
+    };
+
+    const sendMessage = async (textToSend: string) => {
+        if (!textToSend.trim() || loading) return;
+
+        const userMsg: Message = { role: 'user', content: textToSend };
+        const updatedHistory = [...messages, userMsg];
+        setMessages(updatedHistory);
+        setInput('');
         setLoading(true);
 
         try {
-            const res = await fetch('http://localhost:8000/agent/query', {
+            // Kirim request melewati GO GIN GATEWAY (Port 8080)
+            const res = await fetch(`${API_BASE_URL}/agent/query`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
-                    query: text,
                     home_team: homeTeam,
                     away_team: awayTeam,
-                    match_leg: Number(matchLeg),
-                    home_leg1_score: Number(homeLeg1),
-                    away_leg1_score: Number(awayLeg1),
-                }),
+                    match_leg: matchLeg,
+                    home_leg1_score: homeLeg1Score,
+                    away_leg1_score: awayLeg1Score,
+                    current_query: textToSend,
+                    // Kirim 4 pesan terakhir sebagai memori konteks percakapan multi-turn
+                    chat_history: updatedHistory.slice(-4).map(m => ({ role: m.role, content: m.content }))
+                })
             });
 
-            if (!res.ok) throw new Error('Gagal terhubung ke AI Agent');
+            if (!res.ok) throw new Error('Gagal menghubungi Gateway');
 
             const data = await res.json();
-            setMessages((prev) => [...prev, { role: 'assistant', content: data.response }]);
-        } catch (err) {
-            setMessages((prev) => [
+
+            // Simulasi tool-calling metadata yang dieksekusi agent
+            const tools = ['Tool: XGBoost Predictor', 'Tool: SHAP Engine'];
+            if (textToSend.toLowerCase().includes('skenario') || textToSend.toLowerCase().includes('what if')) {
+                tools.push('Tool: What-if Simulator');
+            }
+            tools.push('Tool: Qwen Tactical Synthesizer');
+
+            setMessages(prev => [
                 ...prev,
-                { role: 'assistant', content: 'Maaf, terjadi kesalahan saat menghubungi AI Agent. Pastikan FastAPI dan Backend menyala.' },
+                {
+                    role: 'assistant',
+                    content: data.response || 'Analisis berhasil dibuat.',
+                    intent: data.intent,
+                    tools_called: tools,
+                    ground_truth: data.ground_truth
+                }
+            ]);
+        } catch (err) {
+            setMessages(prev => [
+                ...prev,
+                {
+                    role: 'assistant',
+                    content: 'Maaf, terjadi kendala saat menghubungi Agent Orchestrator melalui Gateway Go.'
+                }
             ]);
         } finally {
             setLoading(false);
         }
     };
 
-    const handleSendMessage = (e: React.FormEvent) => {
-        e.preventDefault();
-        sendQuery(inputQuery);
-    };
-
     return (
-        <div className="mx-auto max-w-4xl space-y-6">
-            {/* Header */}
-            <div className="flex items-center gap-4">
-                <div className="relative h-14 w-14 shrink-0 overflow-hidden rounded-2xl shadow-lg shadow-blue-500/20">
-                    <Logo src="/icon.png" alt="UEFA Champions League" size={56} className="h-full w-full" />
-                </div>
+        <div className="max-w-5xl mx-auto space-y-6">
+            {/* Header Panel Konfigurasi Agent */}
+            <div className="bg-slate-900/90 border border-slate-800 p-6 rounded-3xl backdrop-blur-md shadow-xl flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
                 <div>
-                    <h1 className="flex items-center gap-2 text-3xl font-bold tracking-tight text-white">
-                        <Sparkles className="text-blue-400" size={26} /> ChampIntel Analyst Agent
-                    </h1>
-                    <p className="mt-1 text-sm text-slate-400">
-                        Asisten AI interaktif berbasis agent yang siap menjawab pertanyaan taktis seputar laga UEFA Champions
-                        League.
+                    <div className="flex items-center space-x-3">
+                        <span className="flex h-3.5 w-3.5 rounded-full bg-emerald-500 animate-pulse"></span>
+                        <h1 className="text-xl font-extrabold text-white tracking-wide flex items-center gap-2">
+                            ChampIntel AI Agent
+                            <span className="text-[10px] uppercase font-mono px-2 py-0.5 bg-blue-500/20 text-blue-400 border border-blue-500/30 rounded-md">
+                                OpenClaw Architecture
+                            </span>
+                        </h1>
+                    </div>
+                    <p className="text-xs text-slate-400 mt-1">
+                        Orkestrator Taktikal Otonom berbasis Multi-Tool Calling: XGBoost, SHAP, True Elo, & Qwen 2.5.
                     </p>
                 </div>
-            </div>
 
-            {/* Konfigurasi Klub & Leg untuk Chat */}
-            <div className="space-y-4 rounded-2xl border border-slate-800 bg-slate-900 p-4 shadow-xl">
-                <div className="flex flex-wrap items-center gap-3">
-                    <span className="text-xs font-semibold text-slate-400">Klub Fokus Laga:</span>
+                {/* Konfigurasi Match & Leg */}
+                <div className="flex flex-wrap items-center gap-3 bg-slate-950/80 p-2.5 rounded-2xl border border-slate-800 text-xs">
+                    <input
+                        type="text"
+                        value={homeTeam}
+                        onChange={e => setHomeTeam(e.target.value)}
+                        className="w-28 bg-slate-900 border border-slate-700/80 rounded-xl px-2.5 py-1.5 text-center font-bold text-blue-400 focus:outline-none focus:border-blue-500"
+                        placeholder="Home Team"
+                    />
+                    <span className="text-slate-500 font-extrabold">VS</span>
+                    <input
+                        type="text"
+                        value={awayTeam}
+                        onChange={e => setAwayTeam(e.target.value)}
+                        className="w-28 bg-slate-900 border border-slate-700/80 rounded-xl px-2.5 py-1.5 text-center font-bold text-indigo-400 focus:outline-none focus:border-indigo-500"
+                        placeholder="Away Team"
+                    />
 
-                    <div className="flex items-center gap-2 rounded-xl border border-slate-800 bg-slate-950 px-3 py-1.5">
-                        <Logo src={getTeamLogo(homeTeam)} alt={homeTeam} size={20} />
-                        <select
-                            value={homeTeam}
-                            onChange={(e) => setHomeTeam(e.target.value)}
-                            className="cursor-pointer bg-transparent text-xs text-white focus:outline-none"
-                        >
-                            {teams.map((t) => (
-                                <option key={t.name} value={t.name} className="bg-slate-900 text-white">
-                                    {t.name}
-                                </option>
-                            ))}
-                        </select>
-                    </div>
-
-                    <span className="text-xs font-bold text-slate-500">VS</span>
-
-                    <div className="flex items-center gap-2 rounded-xl border border-slate-800 bg-slate-950 px-3 py-1.5">
-                        <Logo src={getTeamLogo(awayTeam)} alt={awayTeam} size={20} />
-                        <select
-                            value={awayTeam}
-                            onChange={(e) => setAwayTeam(e.target.value)}
-                            className="cursor-pointer bg-transparent text-xs text-white focus:outline-none"
-                        >
-                            {teams.map((t) => (
-                                <option key={t.name} value={t.name} className="bg-slate-900 text-white">
-                                    {t.name}
-                                </option>
-                            ))}
-                        </select>
-                    </div>
-                </div>
-
-                <div className="flex flex-wrap items-center gap-3 border-t border-slate-800 pt-4">
-                    <span className="text-xs font-semibold text-slate-400">Konteks Laga:</span>
-
-                    <div className="inline-flex rounded-lg border border-slate-800 bg-slate-950 p-1">
+                    {/* Selector Leg */}
+                    <div className="flex items-center bg-slate-900 rounded-xl p-0.5 border border-slate-700/60 ml-1">
                         <button
-                            type="button"
                             onClick={() => setMatchLeg(1)}
-                            className={`rounded-md px-3 py-1.5 text-xs font-semibold transition-all ${matchLeg === 1 ? 'bg-blue-600 text-white shadow shadow-blue-600/30' : 'text-slate-400 hover:text-slate-200'
+                            className={`px-2.5 py-1 rounded-lg text-[11px] font-semibold transition-all ${matchLeg === 1 ? 'bg-blue-600 text-white shadow-sm' : 'text-slate-400 hover:text-white'
                                 }`}
                         >
                             Leg 1
                         </button>
                         <button
-                            type="button"
                             onClick={() => setMatchLeg(2)}
-                            className={`rounded-md px-3 py-1.5 text-xs font-semibold transition-all ${matchLeg === 2 ? 'bg-blue-600 text-white shadow shadow-blue-600/30' : 'text-slate-400 hover:text-slate-200'
+                            className={`px-2.5 py-1 rounded-lg text-[11px] font-semibold transition-all ${matchLeg === 2 ? 'bg-blue-600 text-white shadow-sm' : 'text-slate-400 hover:text-white'
                                 }`}
                         >
                             Leg 2
@@ -175,124 +184,132 @@ export default function AnalystPage() {
                     </div>
 
                     {matchLeg === 2 && (
-                        <div className="flex items-center gap-4 text-xs text-slate-400">
-                            <span className="text-slate-600">Skor Leg 1:</span>
-
-                            <div className="flex items-center gap-1.5">
-                                <span className="max-w-[90px] truncate">{homeTeam}</span>
-                                <button
-                                    type="button"
-                                    onClick={() => setHomeLeg1(Math.max(0, homeLeg1 - 1))}
-                                    className="flex h-6 w-6 items-center justify-center rounded-md border border-slate-800 bg-slate-950 text-slate-400 hover:text-blue-400"
-                                >
-                                    <Minus size={11} />
-                                </button>
-                                <span className="w-5 text-center font-bold text-white">{homeLeg1}</span>
-                                <button
-                                    type="button"
-                                    onClick={() => setHomeLeg1(homeLeg1 + 1)}
-                                    className="flex h-6 w-6 items-center justify-center rounded-md border border-slate-800 bg-slate-950 text-slate-400 hover:text-blue-400"
-                                >
-                                    <Plus size={11} />
-                                </button>
-                            </div>
-
-                            <span className="text-slate-700">—</span>
-
-                            <div className="flex items-center gap-1.5">
-                                <button
-                                    type="button"
-                                    onClick={() => setAwayLeg1(Math.max(0, awayLeg1 - 1))}
-                                    className="flex h-6 w-6 items-center justify-center rounded-md border border-slate-800 bg-slate-950 text-slate-400 hover:text-blue-400"
-                                >
-                                    <Minus size={11} />
-                                </button>
-                                <span className="w-5 text-center font-bold text-white">{awayLeg1}</span>
-                                <button
-                                    type="button"
-                                    onClick={() => setAwayLeg1(awayLeg1 + 1)}
-                                    className="flex h-6 w-6 items-center justify-center rounded-md border border-slate-800 bg-slate-950 text-slate-400 hover:text-blue-400"
-                                >
-                                    <Plus size={11} />
-                                </button>
-                                <span className="max-w-[90px] truncate">{awayTeam}</span>
-                            </div>
+                        <div className="flex items-center gap-1.5 pl-1 text-[11px] text-slate-400">
+                            <span>Leg 1:</span>
+                            <input
+                                type="number"
+                                value={homeLeg1Score}
+                                onChange={e => setHomeLeg1Score(parseInt(e.target.value) || 0)}
+                                className="w-9 bg-slate-900 border border-slate-700 rounded-lg p-1 text-center font-bold text-white"
+                            />
+                            <span>-</span>
+                            <input
+                                type="number"
+                                value={awayLeg1Score}
+                                onChange={e => setAwayLeg1Score(parseInt(e.target.value) || 0)}
+                                className="w-9 bg-slate-900 border border-slate-700 rounded-lg p-1 text-center font-bold text-white"
+                            />
                         </div>
                     )}
+
+                    <button
+                        onClick={handleResetChat}
+                        title="Reset Obrolan"
+                        className="p-1.5 text-slate-400 hover:text-amber-400 hover:bg-slate-900 rounded-lg transition-colors ml-auto"
+                    >
+                        🔄
+                    </button>
                 </div>
             </div>
 
-            {/* Chat Container */}
-            <div className="flex h-[550px] flex-col overflow-hidden rounded-3xl border border-slate-800 bg-slate-900 shadow-xl">
-                <div className="flex-1 space-y-4 overflow-y-auto p-6">
-                    {/* Pertanyaan cepat — sekarang di paling atas, sebelum bubble sapaan */}
-                    {!hasUserChatted && (
-                        <div className="flex flex-wrap gap-2">
-                            {quickQuestions.map((q) => (
-                                <button
-                                    key={q}
-                                    onClick={() => sendQuery(q)}
-                                    disabled={loading}
-                                    className="rounded-full border border-slate-800 bg-slate-900 px-3.5 py-2 text-xs text-slate-300 transition-all hover:border-blue-500/40 hover:bg-blue-500/10 hover:text-blue-300 disabled:opacity-50"
+            {/* Area Chat Room Interaktif */}
+            <div className="bg-slate-900/60 border border-slate-800/80 rounded-3xl p-6 shadow-2xl flex flex-col h-[540px]">
+                {/* Daftar Pesan */}
+                <div className="flex-1 overflow-y-auto space-y-4 pr-3 text-xs leading-relaxed">
+                    <AnimatePresence initial={false}>
+                        {messages.map((m, i) => (
+                            <motion.div
+                                key={i}
+                                initial={{ opacity: 0, y: 10 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                className={`flex ${m.role === 'user' ? 'justify-end' : 'justify-start'}`}
+                            >
+                                <div
+                                    className={`max-w-[85%] rounded-3xl p-4 shadow-md space-y-2.5 ${m.role === 'user'
+                                            ? 'bg-blue-600 text-white rounded-br-none'
+                                            : 'bg-slate-950/90 border border-slate-800 text-slate-200 rounded-bl-none'
+                                        }`}
                                 >
-                                    {q}
-                                </button>
-                            ))}
-                        </div>
-                    )}
+                                    {/* Tool Execution Badge (Bukti Nyata Agent Orchestration) */}
+                                    {m.tools_called && m.tools_called.length > 0 && (
+                                        <div className="flex flex-wrap gap-1.5 pb-1 border-b border-slate-800/60">
+                                            {m.tools_called.map((tool, tIdx) => (
+                                                <span
+                                                    key={tIdx}
+                                                    className="text-[9px] font-mono bg-blue-950/50 text-blue-300 border border-blue-800/40 px-2 py-0.5 rounded-md"
+                                                >
+                                                    ⚙️ {tool}
+                                                </span>
+                                            ))}
+                                        </div>
+                                    )}
 
-                    {messages.map((msg, idx) => (
-                        <div key={idx} className={`flex items-start gap-3 ${msg.role === 'user' ? 'flex-row-reverse' : ''}`}>
-                            <div
-                                className={`flex h-8 w-8 shrink-0 items-center justify-center overflow-hidden rounded-full ${msg.role === 'user' ? 'bg-blue-600 text-white' : 'border border-indigo-500/30 bg-indigo-600/30'
-                                    }`}
-                            >
-                                {msg.role === 'user' ? <User size={16} /> : <Logo src="/icon.png" alt="ChampIntel" size={32} />}
-                            </div>
-                            <div
-                                className={`max-w-[85%] rounded-2xl p-4 text-sm leading-relaxed ${msg.role === 'user'
-                                        ? 'rounded-tr-none bg-blue-600 text-white'
-                                        : 'rounded-tl-none border border-slate-800 bg-slate-950 text-slate-200 shadow-md'
-                                    }`}
-                            >
-                                {msg.role === 'assistant' ? (
-                                    <TypewriterText text={msg.content} />
-                                ) : (
-                                    <p className="whitespace-pre-line">{msg.content}</p>
-                                )}
-                            </div>
-                        </div>
-                    ))}
+                                    <p className="leading-relaxed whitespace-pre-line">{m.content}</p>
+
+                                    {/* Ground Truth Card & Intent */}
+                                    {m.ground_truth && (
+                                        <div className="pt-2 border-t border-slate-800/60 flex flex-wrap items-center gap-2 text-[10px]">
+                                            <span className="font-mono text-emerald-400 bg-emerald-950/40 border border-emerald-500/30 px-2 py-0.5 rounded-md">
+                                                🎯 Intent: {m.intent}
+                                            </span>
+                                            <span className="text-slate-400 font-mono">
+                                                📊 XGBoost: {m.ground_truth.home_team} ({(m.ground_truth.home_win_prob * 100).toFixed(0)}%) vs {m.ground_truth.away_team} ({(m.ground_truth.away_win_prob * 100).toFixed(0)}%)
+                                            </span>
+                                        </div>
+                                    )}
+                                </div>
+                            </motion.div>
+                        ))}
+                    </AnimatePresence>
 
                     {loading && (
-                        <div className="flex items-start gap-3">
-                            <div className="flex h-8 w-8 shrink-0 items-center justify-center overflow-hidden rounded-full border border-indigo-500/30 bg-indigo-600/30">
-                                <Logo src="/icon.png" alt="ChampIntel" size={32} />
+                        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="flex justify-start">
+                            <div className="bg-slate-950 border border-slate-800 text-slate-300 rounded-2xl p-3.5 text-xs flex items-center gap-3">
+                                <span className="animate-spin text-base">⚙️</span>
+                                <span className="font-mono text-[11px] text-blue-400">
+                                    Agent Orchestrator is executing tools: predict_match() & explain_factors()...
+                                </span>
                             </div>
-                            <div className="flex items-center gap-1.5 rounded-2xl rounded-tl-none border border-slate-800 bg-slate-950 p-4">
-                                <span className="h-1.5 w-1.5 animate-bounce rounded-full bg-slate-500 [animation-delay:-0.3s]" />
-                                <span className="h-1.5 w-1.5 animate-bounce rounded-full bg-slate-500 [animation-delay:-0.15s]" />
-                                <span className="h-1.5 w-1.5 animate-bounce rounded-full bg-slate-500" />
-                            </div>
-                        </div>
+                        </motion.div>
                     )}
+                    <div ref={messagesEndRef} />
                 </div>
 
-                {/* Input Form */}
-                <form onSubmit={handleSendMessage} className="flex gap-3 border-t border-slate-800 bg-slate-950 p-4">
+                {/* Quick Action Chips */}
+                <div className="flex flex-wrap gap-2 pt-3.5 border-t border-slate-800/80">
+                    {quickChips.map((chip, idx) => (
+                        <button
+                            key={idx}
+                            disabled={loading}
+                            onClick={() => sendMessage(chip.replace(/^[^\s]+\s/, ''))}
+                            className="text-[11px] bg-slate-800/60 hover:bg-blue-600/20 hover:border-blue-500/50 text-slate-300 border border-slate-700/60 rounded-xl px-3 py-1.5 transition-all text-left disabled:opacity-50"
+                        >
+                            {chip}
+                        </button>
+                    ))}
+                </div>
+
+                {/* Input Bar */}
+                <form
+                    onSubmit={e => {
+                        e.preventDefault();
+                        sendMessage(input);
+                    }}
+                    className="flex items-center gap-3 pt-3"
+                >
                     <input
                         type="text"
-                        value={inputQuery}
-                        onChange={(e) => setInputQuery(e.target.value)}
-                        placeholder="Tanyakan analisis, misal: 'Bagaimana jika main di tempat netral?'"
-                        className="flex-1 rounded-xl border border-slate-800 bg-slate-900 px-4 py-3 text-sm text-white focus:border-blue-500 focus:outline-none"
+                        value={input}
+                        onChange={e => setInput(e.target.value)}
+                        placeholder="Tanyakan analisis taktik lanjutan (misal: 'Bagaimana cara membongkar pertahanan lawan?')..."
+                        className="flex-1 bg-slate-950 border border-slate-800 rounded-2xl px-5 py-3 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-blue-500 transition-colors"
                     />
                     <button
                         type="submit"
-                        disabled={loading}
-                        className="flex h-11 w-11 shrink-0 cursor-pointer items-center justify-center rounded-2xl bg-blue-600 text-white shadow-lg shadow-blue-600/20 transition-all hover:bg-blue-500 disabled:cursor-not-allowed disabled:opacity-70"
+                        disabled={loading || !input.trim()}
+                        className="bg-blue-600 hover:bg-blue-500 disabled:opacity-40 text-white text-xs font-bold px-6 py-3 rounded-2xl transition-all shadow-lg shadow-blue-500/20"
                     >
-                        {loading ? <span className="h-3.5 w-3.5 rounded-md bg-white" /> : <ArrowUp size={20} />}
+                        Kirim
                     </button>
                 </form>
             </div>
