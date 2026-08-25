@@ -98,20 +98,14 @@ export default function AnalystPage() {
 
             const data = await res.json();
 
-            // Simulasi tool-calling metadata yang dieksekusi agent
-            const tools = ['Tool: XGBoost Predictor', 'Tool: SHAP Engine'];
-            if (textToSend.toLowerCase().includes('skenario') || textToSend.toLowerCase().includes('what if')) {
-                tools.push('Tool: What-if Simulator');
-            }
-            tools.push('Tool: Qwen Tactical Synthesizer');
-
             setMessages(prev => [
                 ...prev,
                 {
                     role: 'assistant',
                     content: data.response || 'Analisis berhasil dibuat.',
                     intent: data.intent,
-                    tools_called: tools,
+                    // MURNI MEMBACA DATA DARI BACKEND:
+                    tools_called: data.tools_called || ['Tool: XGBoost Predictor', 'Tool: SHAP Engine'],
                     ground_truth: data.ground_truth
                 }
             ]);
