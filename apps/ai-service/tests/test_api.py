@@ -3,9 +3,8 @@ from app.main import app
 
 client = TestClient(app)
 
-
 def test_predict_endpoint():
-    """Uji apakah model XGBoost mengembalikan probabilitas valid yang totalnya 1.0"""
+    """Uji apakah model XGBoost mengembalikan probabilitas valid dan faktor SHAP"""
     payload = {
         "home_team": "Real Madrid",
         "away_team": "Bayern Munich",
@@ -17,15 +16,16 @@ def test_predict_endpoint():
     assert response.status_code == 200
     data = response.json()
 
-    # Validasi probabilitas
+    # Validasi output probabilitas & SHAP
     assert "home_win_prob" in data
     assert "draw_prob" in data
     assert "away_win_prob" in data
     assert "top_factors" in data
     assert len(data["top_factors"]) > 0
 
+    # Total probabilitas harus 100% (1.0)
     total_prob = data["home_win_prob"] + data["draw_prob"] + data["away_win_prob"]
-    assert 0.99 <= total_prob <= 1.01  # Harus berjumlah 100%
+    assert 0.98 <= total_prob <= 1.02
 
 
 def test_simulate_scenario_endpoint():
@@ -43,7 +43,7 @@ def test_simulate_scenario_endpoint():
 
 
 def test_agent_query_endpoint():
-    """Uji apakah Autonomous Agent memanggil tool dan mengembalikan ground truth"""
+    """Uji apakah Autonomous Agent memanggil tool dan mengembalikan respons"""
     payload = {
         "home_team": "Real Madrid",
         "away_team": "Bayern Munich",

@@ -109,15 +109,21 @@ def build_datasets():
                 }
                 dataset_samples.append(sample)
 
+    # 3-Way Split: 70% Train, 15% Validation, 15% Holdout Test
     random.seed(42)
     random.shuffle(dataset_samples)
 
-    split_point = int(len(dataset_samples) * 0.85)
-    train_data = dataset_samples[:split_point]
-    val_data = dataset_samples[split_point:]
+    total = len(dataset_samples)
+    train_end = int(total * 0.70)
+    val_end = int(total * 0.85)
+
+    train_data = dataset_samples[:train_end]
+    val_data = dataset_samples[train_end:val_end]
+    test_data = dataset_samples[val_end:]
 
     train_path = os.path.join(output_dir, "train.jsonl")
     val_path = os.path.join(output_dir, "validation.jsonl")
+    test_path = os.path.join(output_dir, "test.jsonl")
 
     with open(train_path, "w", encoding="utf-8") as f:
         for item in train_data:
@@ -127,7 +133,14 @@ def build_datasets():
         for item in val_data:
             f.write(json.dumps(item, ensure_ascii=False) + "\n")
 
-    print(f"🎉 SUKSES! Dihasilkan {len(train_data)} data train.jsonl & {len(val_data)} data validation.jsonl.")
+    with open(test_path, "w", encoding="utf-8") as f:
+        for item in test_data:
+            f.write(json.dumps(item, ensure_ascii=False) + "\n")
+
+    print(f"🎉 SUKSES 3-WAY SPLIT!")
+    print(f"📦 Train Data      : {len(train_data)} sampel (70%) ➔ {train_path}")
+    print(f"📊 Validation Data : {len(val_data)} sampel (15%) ➔ {val_path}")
+    print(f"🧪 Holdout Test    : {len(test_data)} sampel (15%) ➔ {test_path}")
 
 
 if __name__ == "__main__":
