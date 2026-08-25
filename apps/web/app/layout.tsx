@@ -14,13 +14,16 @@ export default function RootLayout({
   const [collapsed, setCollapsed] = useState(false);
 
   return (
-    <html lang="en" className="dark">
+    /* 1. UBAH DI SINI: Ganti lang="en" jadi lang="id", tambah translate="no" dan notranslate */
+    <html lang="id" className="dark notranslate" translate="no">
       <head>
         <title>ChampIntel - UCL AI Match Analysis</title>
         <meta
           name="description"
           content="AI-Powered UEFA Champions League Match Prediction & Analysis Platform"
         />
+        {/* 2. TAMBAHKAN BARIS INI: Mematikan paksa auto-translate Google/Edge */}
+        <meta name="google" content="notranslate" />
         <link rel="icon" href="/icon.png" type="image/png" />
       </head>
       <body className="flex min-h-screen bg-slate-950 text-slate-100 selection:bg-blue-500 selection:text-white overflow-x-hidden">
@@ -35,7 +38,7 @@ export default function RootLayout({
           className="min-h-screen flex-1 p-6 md:p-10 bg-slate-950 overflow-x-hidden w-full flex flex-col justify-between"
         >
           <div>
-          {children}
+            {children}
           </div>
           <Footer />
         </motion.main>

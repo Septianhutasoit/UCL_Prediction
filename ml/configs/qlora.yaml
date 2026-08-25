@@ -1,1 +1,13 @@
- 
+ base_model: "Qwen/Qwen2.5-1.5B-Instruct"
+framework: "Unsloth"
+quantization: "4-bit (QLoRA)"
+lora_config:
+  r: 16
+  lora_alpha: 16
+  lora_dropout: 0.05
+  target_modules: ["q_proj", "k_proj", "v_proj", "o_proj", "gate_proj", "up_proj", "down_proj"]
+training:
+  epochs: 3
+  learning_rate: 0.0002
+  batch_size: 4
+  gradient_accumulation_steps: 4
