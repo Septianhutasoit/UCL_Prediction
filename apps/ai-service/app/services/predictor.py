@@ -167,12 +167,16 @@ class UCLPredictor:
         return result
 
     def simulate_scenario(self, data: dict, scenario_type: str):
-        base_result = self.predict(data)
+        # 1. PERBAIKAN BUG 1: Gunakan predict_raw() (SKIP pemanggilan LLM agar 10x lebih cepat)
+        base_result = self.predict_raw(data)
         base_h = base_result["home_win_prob"]
 
         h_prob = base_h
         d_prob = base_result["draw_prob"]
         a_prob = base_result["away_win_prob"]
+        match_leg = data.get("match_leg", 1)
+        h_leg1 = data.get("home_leg1_score", 0) or 0
+        a_leg1 = data.get("away_leg1_score", 0) or 0
 
         scenario_title = ""
         explanation = ""
@@ -191,22 +195,31 @@ class UCLPredictor:
             a_prob = max(0.05, a_prob - 0.04)
             explanation = f"Menerapkan strategi menyerang total meningkatkan intensitas gol {data.get('home_team')}."
 
+        # Normalisasi probabilitas agar totalnya tetap 1.0 (100%)
         total = h_prob + d_prob + a_prob
         h_prob = round(h_prob / total, 2)
         d_prob = round(d_prob / total, 2)
         a_prob = round(1.0 - h_prob - d_prob, 2)
 
+        # 2. PERBAIKAN BUG 2: Hitung ulang peluang kelolosan (Qualification Prob) jika Leg 2
+        scenario_home_qual = None
+        scenario_away_qual = None
+        if match_leg == 2:
+            agg_diff = h_leg1 - a_leg1
+            scenario_home_qual = round(0.5 + (h_prob - a_prob) * 0.3 + (agg_diff * 0.1), 2)
+            scenario_home_qual = max(0.05, min(0.95, scenario_home_qual))
+            scenario_away_qual = round(1.0 - scenario_home_qual, 2)
+
         scenario_result = {
             "home_win_prob": h_prob,
             "draw_prob": d_prob,
             "away_win_prob": a_prob,
-            "home_qualification_prob": base_result.get("home_qualification_prob"),
-            "away_qualification_prob": base_result.get("away_qualification_prob"),
+            "home_qualification_prob": scenario_home_qual,
+            "away_qualification_prob": scenario_away_qual,
             "ai_analysis": explanation
         }
 
         diff = round(h_prob - base_h, 2)
-        print(f"🔍 DEBUG -> Base Win: {base_h} | Scenario Win: {h_prob} | Diff: {diff}")
 
         return {
             "scenario_name": scenario_title,

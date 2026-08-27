@@ -23,4 +23,4 @@ async def health_check():
     return {"status": "healthy", "service": "ai-service"}
 
 app.include_router(predict_router)
-app.include_router(agent_router)
+app.include_router(agent_router, prefix="/agent", tags=["Agent"])
