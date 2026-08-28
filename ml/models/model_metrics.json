@@ -1,0 +1,11 @@
+{
+    "training_samples": 20783,
+    "test_samples": 5196,
+    "total_samples": 25979,
+    "accuracy": "50.29%",
+    "log_loss": 1.0022,
+    "brier_score": 0.5992,
+    "f1_score": 0.3612,
+    "validation_method": "Temporal Split (Anti Data-Leakage)",
+    "calibration_status": "Well-Calibrated (Brier < 0.60)"
+}

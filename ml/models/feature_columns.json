@@ -1,1 +1,1 @@
-["match_leg", "home_avg_scored", "home_avg_conceded", "away_avg_scored", "away_avg_conceded", "elo_difference", "aggregate_difference"]
+["match_leg", "home_rolling_scored_5", "home_rolling_conceded_5", "away_rolling_scored_5", "away_rolling_conceded_5", "form_points_diff_5", "elo_difference", "aggregate_difference"]

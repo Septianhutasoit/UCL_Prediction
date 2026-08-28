@@ -32,6 +32,7 @@ class UCLPredictor:
             self.meta_path = os.path.abspath("ml/models/feature_columns.json")
             self.stats_path = os.path.abspath("ml/models/team_stats.json")
 
+        # Impor fungsi ekstraksi 8 fitur terpadu
         from ml.features.feature_builder import extract_match_features, INITIAL_ELO
         self.extract_match_features = extract_match_features
         self.INITIAL_ELO = INITIAL_ELO
@@ -56,14 +57,14 @@ class UCLPredictor:
                     with open(self.stats_path, "r") as f:
                         self.team_stats = json.load(f)
 
-                print(f">>> Model XGBoost & Profil Tim ({len(self.team_stats)} klub) BERHASIL dimuat ke FastAPI! <<<")
+                print(f">>> Model XGBoost & Profil Tim ({len(self.team_stats)} klub dengan Form 5 Laga) BERHASIL dimuat! <<<")
             else:
                 print(">>> Peringatan: File model XGBoost belum ditemukan! <<<")
         except Exception as e:
             print(f"🔥 Gagal memuat model: {str(e)}")
 
     def _predict_core(self, data: dict):
-        """Fungsi inti: Menghitung probabilitas XGBoost dan SHAP tanpa memanggil LLM."""
+        """Fungsi inti: Menghitung 8 fitur, probabilitas XGBoost, dan SHAP tanpa memanggil LLM."""
         if self.model is None:
             return None
 
@@ -73,21 +74,32 @@ class UCLPredictor:
         home_leg1_score = data.get("home_leg1_score", 0) or 0
         away_leg1_score = data.get("away_leg1_score", 0) or 0
 
+        # Ambil statistik form 5 laga dan True Elo
         h_stats = self.team_stats.get(
-            home_team, {"elo_rating": self.INITIAL_ELO, "avg_scored": 1.5, "avg_conceded": 1.0}
+            home_team, {"elo_rating": self.INITIAL_ELO, "avg_scored_5": 1.4, "avg_conceded_5": 1.2, "form_pts_5": 7}
         )
         a_stats = self.team_stats.get(
-            away_team, {"elo_rating": self.INITIAL_ELO, "avg_scored": 1.3, "avg_conceded": 1.2}
+            away_team, {"elo_rating": self.INITIAL_ELO, "avg_scored_5": 1.2, "avg_conceded_5": 1.3, "form_pts_5": 6}
         )
+        
         h_elo = h_stats.get("elo_rating", self.INITIAL_ELO)
         a_elo = a_stats.get("elo_rating", self.INITIAL_ELO)
+        h_sc_5 = h_stats.get("avg_scored_5", h_stats.get("avg_scored", 1.4))
+        h_cc_5 = h_stats.get("avg_conceded_5", h_stats.get("avg_conceded", 1.2))
+        a_sc_5 = a_stats.get("avg_scored_5", a_stats.get("avg_scored", 1.2))
+        a_cc_5 = a_stats.get("avg_conceded_5", a_stats.get("avg_conceded", 1.3))
+        h_pts_5 = h_stats.get("form_pts_5", 7)
+        a_pts_5 = a_stats.get("form_pts_5", 6)
 
+        # Ekstraksi 8 Fitur Terpadu
         X = self.extract_match_features(
             match_leg=match_leg,
-            home_rolling_scored=h_stats["avg_scored"],
-            home_rolling_conceded=h_stats["avg_conceded"],
-            away_rolling_scored=a_stats["avg_scored"],
-            away_rolling_conceded=a_stats["avg_conceded"],
+            home_rolling_scored_5=h_sc_5,
+            home_rolling_conceded_5=h_cc_5,
+            away_rolling_scored_5=a_sc_5,
+            away_rolling_conceded_5=a_cc_5,
+            home_form_pts_5=h_pts_5,
+            away_form_pts_5=a_pts_5,
             home_elo=h_elo,
             away_elo=a_elo,
             home_leg1_score=home_leg1_score,
@@ -126,14 +138,12 @@ class UCLPredictor:
         }
 
     def predict_raw(self, data: dict):
-        """Method cepat untuk generator dataset (XGBoost + SHAP saja, SKIP LLM)."""
         core = self._predict_core(data)
         if core is None:
             return {"home_win_prob": 0.50, "draw_prob": 0.25, "away_win_prob": 0.25, "top_factors": []}
         return core
 
     def predict(self, data: dict):
-        """Method publik untuk API: Menggabungkan hasil core + Narasi LLM."""
         core = self._predict_core(data)
         if core is None:
             return {
@@ -143,7 +153,6 @@ class UCLPredictor:
                 "ai_analysis": "Model XGBoost belum dimuat."
             }
 
-        # Format konteks agregat
         agg_text = ""
         if core["match_leg"] == 2:
             agg_text = (
@@ -157,7 +166,6 @@ class UCLPredictor:
             "away_win_prob": core["away_win_prob"]
         }
 
-        # Panggil LLM Qwen untuk merangkum teks
         analysis = llm_service.generate_explanation(
             core["home_team"], core["away_team"], probs_dict, core["top_factors"], core["match_leg"], agg_text
         )
@@ -167,7 +175,6 @@ class UCLPredictor:
         return result
 
     def simulate_scenario(self, data: dict, scenario_type: str):
-        # 1. PERBAIKAN BUG 1: Gunakan predict_raw() (SKIP pemanggilan LLM agar 10x lebih cepat)
         base_result = self.predict_raw(data)
         base_h = base_result["home_win_prob"]
 
@@ -195,13 +202,11 @@ class UCLPredictor:
             a_prob = max(0.05, a_prob - 0.04)
             explanation = f"Menerapkan strategi menyerang total meningkatkan intensitas gol {data.get('home_team')}."
 
-        # Normalisasi probabilitas agar totalnya tetap 1.0 (100%)
         total = h_prob + d_prob + a_prob
         h_prob = round(h_prob / total, 2)
         d_prob = round(d_prob / total, 2)
         a_prob = round(1.0 - h_prob - d_prob, 2)
 
-        # 2. PERBAIKAN BUG 2: Hitung ulang peluang kelolosan (Qualification Prob) jika Leg 2
         scenario_home_qual = None
         scenario_away_qual = None
         if match_leg == 2:
