@@ -2,11 +2,10 @@ import os
 import json
 from app.services.predictor import predictor
 
-def tool_predict_match(match_data: dict) -> dict:
-    """
-    Tool 1: Menghitung probabilitas kemenangan, seri, dan peluang lolos via model XGBoost.
-    """
-    res = predictor.predict_raw(match_data)
+
+def tool_predict_match(match_data: dict, cached_res: dict = None) -> dict:
+    """Tool 1: Mengambil probabilitas XGBoost (menggunakan cache jika sudah dihitung)."""
+    res = cached_res if cached_res else predictor.predict_raw(match_data)
     return {
         "tool_name": "tool_predict_match",
         "status": "success",
@@ -20,11 +19,9 @@ def tool_predict_match(match_data: dict) -> dict:
     }
 
 
-def tool_explain_shap(match_data: dict) -> dict:
-    """
-    Tool 2: Mengekstrak faktor kontribusi fitur matematis (SHAP Values).
-    """
-    res = predictor.predict_raw(match_data)
+def tool_explain_shap(match_data: dict, cached_res: dict = None) -> dict:
+    """Tool 2: Mengambil faktor SHAP (menggunakan cache jika sudah dihitung)."""
+    res = cached_res if cached_res else predictor.predict_raw(match_data)
     return {
         "tool_name": "tool_explain_shap",
         "status": "success",
@@ -36,9 +33,7 @@ def tool_explain_shap(match_data: dict) -> dict:
 
 
 def tool_query_team_intelligence(team_name: str) -> dict:
-    """
-    Tool 3: Menarik profil statistik dan rating True Elo tim dari database lokal.
-    """
+    """Tool 3: Menarik profil statistik dan rating True Elo tim."""
     stats = predictor.team_stats.get(
         team_name,
         {"elo_rating": 1500.0, "avg_scored": 1.4, "avg_conceded": 1.2, "total_matches": 0}
@@ -57,9 +52,7 @@ def tool_query_team_intelligence(team_name: str) -> dict:
 
 
 def tool_simulate_scenario(match_data: dict, scenario_type: str) -> dict:
-    """
-    Tool 4: Mengeksekusi simulasi taktik what-if (All-Out Attack, Neutral Venue, dll).
-    """
+    """Tool 4: Mengeksekusi simulasi taktik what-if."""
     sim = predictor.simulate_scenario(match_data, scenario_type)
     return {
         "tool_name": "tool_simulate_scenario",
@@ -69,10 +62,7 @@ def tool_simulate_scenario(match_data: dict, scenario_type: str) -> dict:
 
 
 def tool_model_confidence_metrics() -> dict:
-    """
-    Tool 5: Memberikan transparansi metrik ilmiah (Log Loss, Brier Score, Akurasi) 
-    untuk menjawab pertanyaan user terkait keyakinan data/reliabilitas sistem.
-    """
+    """Tool 5: Memberikan metrik transparansi ilmiah (Log Loss, Brier Score, Akurasi)."""
     return {
         "tool_name": "tool_model_confidence_metrics",
         "status": "success",
@@ -88,7 +78,6 @@ def tool_model_confidence_metrics() -> dict:
     }
 
 
-# Kamus Registry Tool OpenClaw
 TOOL_REGISTRY = {
     "predict_match": tool_predict_match,
     "explain_shap": tool_explain_shap,

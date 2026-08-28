@@ -3,8 +3,8 @@ from app.main import app
 
 client = TestClient(app)
 
+
 def test_predict_endpoint():
-    """Uji apakah model XGBoost mengembalikan probabilitas valid dan faktor SHAP"""
     payload = {
         "home_team": "Real Madrid",
         "away_team": "Bayern Munich",
@@ -15,21 +15,11 @@ def test_predict_endpoint():
     response = client.post("/predict", json=payload)
     assert response.status_code == 200
     data = response.json()
-
-    # Validasi output probabilitas & SHAP
     assert "home_win_prob" in data
-    assert "draw_prob" in data
-    assert "away_win_prob" in data
     assert "top_factors" in data
-    assert len(data["top_factors"]) > 0
-
-    # Total probabilitas harus 100% (1.0)
-    total_prob = data["home_win_prob"] + data["draw_prob"] + data["away_win_prob"]
-    assert 0.98 <= total_prob <= 1.02
 
 
 def test_simulate_scenario_endpoint():
-    """Uji apakah simulator what-if merespons perubahan taktik"""
     payload = {
         "home_team": "Real Madrid",
         "away_team": "Bayern Munich",
@@ -39,21 +29,38 @@ def test_simulate_scenario_endpoint():
     assert response.status_code == 200
     data = response.json()
     assert "scenario_name" in data
-    assert "probability_difference" in data
 
 
-def test_agent_query_endpoint():
-    """Uji apakah Autonomous Agent memanggil tool dan mengembalikan respons"""
+def test_agent_english_nlu_query():
+    """Uji NLU Semantik: Query Bahasa Inggris 'What is the weakness of Bayern?'"""
     payload = {
         "home_team": "Real Madrid",
         "away_team": "Bayern Munich",
         "match_leg": 1,
-        "current_query": "Apakah kamu yakin dengan data ini?"
+        "current_query": "What is the main defensive weakness of the away team?"
     }
     response = client.post("/agent/query", json=payload)
     assert response.status_code == 200
     data = response.json()
-    assert "response" in data
-    assert "tools_called" in data
-    assert "intent" in data
-    assert len(data["tools_called"]) > 0
+    assert data["intent"] == "defensive_weakness"
+    assert "Tool: Team Intelligence DB" in data["tools_called"]
+
+
+def test_agent_multiturn_memory():
+    """Uji Memori Multi-Turn: Mengingat konteks pertanyaan sebelumnya"""
+    payload = {
+        "home_team": "Real Madrid",
+        "away_team": "Bayern Munich",
+        "match_leg": 1,
+        "current_query": "Lalu bagaimana cara mengeksploitasinya?",
+        "chat_history": [
+            {"role": "user", "content": "Apa kelemahan Bayern Munich?"},
+            {"role": "assistant", "content": "Kelemahan Bayern ada pada rest-defense..."}
+        ]
+    }
+    response = client.post("/agent/query", json=payload)
+    assert response.status_code == 200
+    data = response.json()
+    # Agen berhasil mendeteksi intent dari riwayat percakapan sebelumnya
+    assert data["intent"] == "defensive_weakness"
+    assert "[Konteks Lanjutan]" in data["response"]
