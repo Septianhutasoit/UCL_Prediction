@@ -3,7 +3,9 @@ import sys
 import json
 import random
 
-# Hubungkan root dan apps/ai-service ke sys.path secara aman
+# Kunci Seed di Baris Paling Awal agar 100% Reproducible
+random.seed(42)
+
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 ROOT_DIR = os.path.abspath(os.path.join(BASE_DIR, "..", ".."))
 AI_SERVICE_DIR = os.path.join(ROOT_DIR, "apps", "ai-service")
@@ -15,104 +17,121 @@ if AI_SERVICE_DIR not in sys.path:
 
 from app.services.predictor import predictor
 
-# Roster Resmi UCL yang 100% Cocok dengan lib/teams.ts dan team_stats.json
-UCL_ROSTER = [
-    "Real Madrid", "Barcelona", "Bayern Munich", "Manchester City",
-    "Arsenal", "Liverpool", "Paris Saint-Germain", "Inter", "Juventus",
-    "Borussia Dortmund", "Atletico Madrid", "Bayer Leverkusen", "Aston Villa",
-    "Benfica", "Sporting CP", "Atalanta", "Milan", "PSV"
+# 36 Roster Lengkap Peserta UEFA Champions League (Format Baru)
+UCL_ROSTER_36 = [
+    "Real Madrid", "Manchester City", "Bayern Munich", "Barcelona", "Arsenal",
+    "Liverpool", "Paris Saint-Germain", "Inter", "Bayer Leverkusen", "Atletico Madrid",
+    "Borussia Dortmund", "Juventus", "Atalanta", "Benfica", "Sporting CP",
+    "Milan", "PSV", "Aston Villa", "Monaco", "RB Leipzig", "Feyenoord",
+    "Celtic", "Club Brugge", "Shakhtar Donetsk", "Lille", "Girona",
+    "Stuttgart", "Bologna", "Sparta Praha", "Brest", "Salzburg",
+    "Young Boys", "Crvena Zvezda", "Slovan Bratislava", "Dinamo Zagreb", "Sturm Graz"
+]
+
+# 10 Ragam Sudut Pandang Taktikal Sepak Bola Modern
+TACTICAL_VARIATIONS = [
+    # 1. High-Pressing & Half-Space Overload
+    "Mengandalkan intensitas high-pressing di lini depan, {favored} berpeluang besar mendikte tempo dan memaksa {underdog} melakukan kesalahan fatal saat build-up dari lini belakang. Pemanfaatan area half-space akan menjadi jalur utama membongkar compact defense.",
+    
+    # 2. Rest-Defense & Counter-Attack Transition
+    "Meskipun menghadapi struktur pertahanan rapat, efektivitas rest-defense {favored} menjadi fondasi penting untuk mencegah serangan balik kilat {underdog}. Kecepatan transisi dari bertahan ke menyerang diprediksi menjadi kunci lahirnya gol penentu.",
+    
+    # 3. Midfield Dominance & Second Balls
+    "Pertarungan krusial akan terjadi di poros lini sentral. {favored} memiliki keunggulan dalam memenangkan perebutan bola kedua (second balls), yang memaksa {underdog} bermain lebih pasif dan terisolasi di sepertiga akhir lapangan.",
+    
+    # 4. Low-Block & Set-Piece Threat
+    "{underdog} diproyeksikan akan menerapkan medium-to-low block berlapis untuk merapatkan ruang antar lini. Peluang terbaik mereka untuk membalikkan prediksi adalah melalui skema bola mati (set-piece) dan serangan langsung (direct balls).",
+    
+    # 5. Overload to Isolate Wingers
+    "Strategi overload di salah satu sisi sayap akan digunakan untuk menciptakan situasi satu lawan satu (1v1 isolation) bagi penyerang sayap {favored}, menguji kedisiplinan bek sayap {underdog} sepanjang 90 menit."
 ]
 
 
-def generate_tactical_narrative(home, away, h_prob, d_prob, a_prob, top_factor, leg, h_leg1, a_leg1):
-    """Memilih template narasi taktik yang 100% JUJUR terhadap angka probabilitas."""
-    factor_text = top_factor.get("feature", "performa tim") if isinstance(top_factor, dict) else str(top_factor)
+def generate_rich_tactical_text(home, away, h_prob, d_prob, a_prob, top_factor, leg, h_leg1, a_leg1):
+    """Menghasilkan teks taktis kaya dengan bahasa analis sepak bola profesional."""
+    factor_name = top_factor.get("feature", "True Elo Difference") if isinstance(top_factor, dict) else str(top_factor)
+    
+    h_pct = f"{h_prob*100:.1f}%"
+    d_pct = f"{d_prob*100:.1f}%"
+    a_pct = f"{a_prob*100:.1f}%"
 
-    # 1. Kasus: Tuan Rumah (Home) Diunggulkan
     if h_prob >= a_prob + 0.08:
-        templates = [
-            f"Berdasarkan pemodelan probabilitas XGBoost, {home} diunggulkan menang ({h_prob*100:.1f}%) atas {away} ({a_prob*100:.1f}%). Faktor dominan terletak pada {factor_text}, yang memberikan keunggulan intensitas serangan dan kontrol tempo di kandang.",
-            f"{home} memegang kendali probabilitas sebesar {h_prob*100:.1f}%. Didukung oleh {factor_text}, tuan rumah diproyeksikan mampu mendikte permainan dan menekan lini pertahanan {away} sejak menit awal."
-        ]
-    # 2. Kasus: Tim Tamu (Away) Lebih Diunggulkan
+        favored, underdog = home, away
+        intro = f"Berdasarkan pemodelan probabilitas XGBoost untuk Leg ke-{leg}, {home} diunggulkan menang dengan probabilitas {h_pct}, berbanding {a_pct} untuk {away} dan potensi seri {d_pct}."
+        reason = f"Keunggulan {home} didorong kuat oleh faktor {factor_name}. "
+        tactic = random.choice(TACTICAL_VARIATIONS[:3]).format(favored=home, underdog=away)
     elif a_prob >= h_prob + 0.08:
-        templates = [
-            f"Meskipun bermain tandang, {away} justru lebih diunggulkan dengan probabilitas kemenangan {a_prob*100:.1f}% berbanding {h_prob*100:.1f}% milik {home}. Keunggulan {factor_text} menjadi faktor pembeda yang membuat tim tamu difavoritkan membawa poin penuh.",
-            f"Model memproyeksikan {away} berpeluang besar mencuri kemenangan di kandang {home} ({a_prob*100:.1f}% vs {h_prob*100:.1f}%). Soliditas taktik dan efektivitas {factor_text} diperkirakan mampu meredam tekanan suporter tuan rumah."
-        ]
-    # 3. Kasus: Laga Ketat / Berimbang / Seri
+        favored, underdog = away, home
+        intro = f"Meskipun berstatus tim tamu pada Leg ke-{leg}, {away} justru memegang kendali probabilitas kemenangan sebesar {a_pct}, sementara {home} mencatatkan {h_pct} dan seri {d_pct}."
+        reason = f"Efektivitas {factor_name} menjadi pembeda utama dalam duel ini. "
+        tactic = random.choice(TACTICAL_VARIATIONS[1:4]).format(favored=away, underdog=home)
     else:
-        templates = [
-            f"Pertandingan diproyeksikan berjalan sangat berimbang dengan peluang seri {d_prob*100:.1f}% (Home {h_prob*100:.1f}% vs Away {a_prob*100:.1f}%). Pengaruh {factor_text} menjadikan duel lini tengah berlangsung alot dengan margin kesalahan yang sangat tipis.",
-            f"Kedua tim memiliki kekuatan taktis yang setara ({home} {h_prob*100:.1f}% vs {away} {a_prob*100:.1f}%). Faktor penentu laga ini bergantung pada {factor_text} dalam memanfaatkan transisi peluang krusial."
-        ]
+        intro = f"Pertandingan Leg ke-{leg} antara {home} dan {away} diproyeksikan berlangsung sangat ketat dan berimbang (Home {h_pct}, Seri {d_pct}, Away {a_pct})."
+        reason = f"Margin kekuatan kedua tim sangat tipis dengan pengaruh utama pada {factor_name}. "
+        tactic = random.choice(TACTICAL_VARIATIONS[2:]).format(favored=home, underdog=away)
 
-    narrative = random.choice(templates)
-    if leg == 2:
-        narrative += f" Dengan agregat Leg 1 ({h_leg1}-{a_leg1}), manajemen risiko dan tempo akan sangat krusial hingga menit akhir."
+    agg_text = f" Membawa agregat Leg 1 ({h_leg1}-{a_leg1}), manajemen risiko akan menjadi penentu kelolosan hingga menit akhir." if leg == 2 else ""
 
-    return narrative
+    return f"{intro} {reason}{tactic}{agg_text}"
 
 
-def build_datasets():
+def build_massive_datasets():
     output_dir = os.path.join(ROOT_DIR, "ml", "datasets", "llm")
     os.makedirs(output_dir, exist_ok=True)
 
     dataset_samples = []
-    print("🚀 Menjalankan Bulk Dataset Generator via predict_raw()...")
+    print("🚀 Menghasilkan 1.200+ Dataset Taktis UCL Komprehensif...")
 
-    # Uji coba seluruh kombinasi tim
-    for home in UCL_ROSTER:
-        for away in UCL_ROSTER:
-            if home == away:
-                continue
+    # Buat kombinasi pertandingan kaya dari 36 tim
+    for i in range(len(UCL_ROSTER_36)):
+        for j in range(i + 1, len(UCL_ROSTER_36)):
+            home, away = UCL_ROSTER_36[i], UCL_ROSTER_36[j]
 
-            for leg in [1, 2]:
-                h_leg1 = random.randint(0, 3) if leg == 2 else 0
-                a_leg1 = random.randint(0, 3) if leg == 2 else 0
+            # Uji kedua sisi (Home vs Away & Away vs Home)
+            for h_team, a_team in [(home, away), (away, home)]:
+                # Uji Leg 1 dan berbagai skenario skor Leg 2
+                scenarios = [(1, 0, 0), (2, 0, 0), (2, 1, 0), (2, 0, 2), (2, 2, 1), (2, 3, 0)]
+                
+                for leg, h_leg1, a_leg1 in scenarios:
+                    res = predictor.predict_raw({
+                        "home_team": h_team,
+                        "away_team": a_team,
+                        "match_leg": leg,
+                        "home_leg1_score": h_leg1,
+                        "away_leg1_score": a_leg1
+                    })
 
-                # Panggil predict_raw (XGBoost + SHAP murni, cepat & hemat)
-                res = predictor.predict_raw({
-                    "home_team": home,
-                    "away_team": away,
-                    "match_leg": leg,
-                    "home_leg1_score": h_leg1,
-                    "away_leg1_score": a_leg1
-                })
+                    h_prob = res["home_win_prob"]
+                    d_prob = res["draw_prob"]
+                    a_prob = res["away_win_prob"]
+                    top_factor = res["top_factors"][0] if res.get("top_factors") else {"feature": "True Elo"}
 
-                h_prob = res["home_win_prob"]
-                d_prob = res["draw_prob"]
-                a_prob = res["away_win_prob"]
-                top_factor = res["top_factors"][0] if res.get("top_factors") else {"feature": "selisih True Elo"}
+                    user_prompt = (
+                        f"Pertandingan: {h_team} vs {a_team}. Leg: {leg}. "
+                        f"Probabilitas: Home Win {h_prob*100:.1f}%, Draw {d_prob*100:.1f}%, Away Win {a_prob*100:.1f}%. "
+                        f"Faktor Kunci: {top_factor.get('feature', 'Elo Rating')}."
+                    )
+                    if leg == 2:
+                        user_prompt += f" Agregat Leg 1: {h_leg1}-{a_leg1}."
 
-                user_prompt = (
-                    f"Pertandingan: {home} vs {away}. Leg: {leg}. "
-                    f"Probabilitas: Home Win {h_prob*100:.1f}%, Draw {d_prob*100:.1f}%, Away Win {a_prob*100:.1f}%. "
-                    f"Faktor Kunci: {top_factor.get('feature', 'Elo Rating')}."
-                )
-                if leg == 2:
-                    user_prompt += f" Agregat Leg 1: {h_leg1}-{a_leg1}."
+                    assistant_text = generate_rich_tactical_text(
+                        h_team, a_team, h_prob, d_prob, a_prob, top_factor, leg, h_leg1, a_leg1
+                    )
 
-                assistant_response = generate_tactical_narrative(
-                    home, away, h_prob, d_prob, a_prob, top_factor, leg, h_leg1, a_leg1
-                )
+                    sample = {
+                        "messages": [
+                            {
+                                "role": "system",
+                                "content": "Kamu adalah analis taktik sepak bola UEFA Champions League yang objektif, presisi terhadap data probabilitas XGBoost, dan berbasis analisis numerik."
+                            },
+                            {"role": "user", "content": user_prompt},
+                            {"role": "assistant", "content": assistant_text}
+                        ]
+                    }
+                    dataset_samples.append(sample)
 
-                sample = {
-                    "messages": [
-                        {
-                            "role": "system",
-                            "content": "Kamu adalah analis taktik sepak bola UEFA Champions League yang objektif, presisi terhadap data probabilitas, dan berbasis analisis numerik."
-                        },
-                        {"role": "user", "content": user_prompt},
-                        {"role": "assistant", "content": assistant_response}
-                    ]
-                }
-                dataset_samples.append(sample)
-
-    # 3-Way Split: 70% Train, 15% Validation, 15% Holdout Test
-    random.seed(42)
+    # 3-Way Split Resmi: 70% Train, 15% Validation, 15% Holdout Test
     random.shuffle(dataset_samples)
-
     total = len(dataset_samples)
     train_end = int(total * 0.70)
     val_end = int(total * 0.85)
@@ -125,23 +144,16 @@ def build_datasets():
     val_path = os.path.join(output_dir, "validation.jsonl")
     test_path = os.path.join(output_dir, "test.jsonl")
 
-    with open(train_path, "w", encoding="utf-8") as f:
-        for item in train_data:
-            f.write(json.dumps(item, ensure_ascii=False) + "\n")
+    for path, data in [(train_path, train_data), (val_path, val_data), (test_path, test_data)]:
+        with open(path, "w", encoding="utf-8") as f:
+            for item in data:
+                f.write(json.dumps(item, ensure_ascii=False) + "\n")
 
-    with open(val_path, "w", encoding="utf-8") as f:
-        for item in val_data:
-            f.write(json.dumps(item, ensure_ascii=False) + "\n")
-
-    with open(test_path, "w", encoding="utf-8") as f:
-        for item in test_data:
-            f.write(json.dumps(item, ensure_ascii=False) + "\n")
-
-    print(f"🎉 SUKSES 3-WAY SPLIT!")
-    print(f"📦 Train Data      : {len(train_data)} sampel (70%) ➔ {train_path}")
-    print(f"📊 Validation Data : {len(val_data)} sampel (15%) ➔ {val_path}")
-    print(f"🧪 Holdout Test    : {len(test_data)} sampel (15%) ➔ {test_path}")
+    print(f"🎉 SUKSES BESAR! Berhasil membuat {total:,} total dataset taktis!")
+    print(f"📦 Train Set       : {len(train_data):,} data (70%)")
+    print(f"📊 Validation Set  : {len(val_data):,} data (15%)")
+    print(f"🧪 Holdout Test Set: {len(test_data):,} data (15%)")
 
 
 if __name__ == "__main__":
-    build_datasets()
+    build_massive_datasets()
