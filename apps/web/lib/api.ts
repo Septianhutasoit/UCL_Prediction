@@ -20,16 +20,26 @@ export async function fetchPrediction(data: PredictionRequest): Promise<Predicti
 }
 
 export async function fetchHistory() {
-    const response = await fetch(`${API_BASE_URL}/history`, {
-        method: 'GET',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-    });
+    try {
+        const response = await fetch(`${API_BASE_URL}/history`, {
+            cache: 'no-store'
+        });
 
-    if (!response.ok) {
-        throw new Error('Gagal mengambil riwayat dari database Supabase');
+        if (!response.ok) {
+            // Fallback ke localStorage jika gateway belum ada data
+            if (typeof window !== 'undefined') {
+                const localData = localStorage.getItem('champintel_history');
+                return localData ? JSON.parse(localData) : [];
+            }
+            return [];
+        }
+        return await response.json();
+    } catch (error) {
+        // Fallback aman jika server offline
+        if (typeof window !== 'undefined') {
+            const localData = localStorage.getItem('champintel_history');
+            return localData ? JSON.parse(localData) : [];
+        }
+        return [];
     }
-
-    return response.json();
 }

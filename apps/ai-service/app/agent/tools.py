@@ -3,8 +3,16 @@ import json
 from app.services.predictor import predictor
 
 
+def find_project_root(current_dir, target_folder="ml"):
+    """Mencari root folder proyek secara dinamis agar path tidak pernah patah."""
+    while current_dir != os.path.dirname(current_dir):
+        if os.path.exists(os.path.join(current_dir, target_folder)):
+            return current_dir
+        current_dir = os.path.dirname(current_dir)
+    return None
+
+
 def tool_predict_match(match_data: dict, cached_res: dict = None) -> dict:
-    """Tool 1: Mengambil probabilitas XGBoost (menggunakan cache jika sudah dihitung)."""
     res = cached_res if cached_res else predictor.predict_raw(match_data)
     return {
         "tool_name": "tool_predict_match",
@@ -20,7 +28,6 @@ def tool_predict_match(match_data: dict, cached_res: dict = None) -> dict:
 
 
 def tool_explain_shap(match_data: dict, cached_res: dict = None) -> dict:
-    """Tool 2: Mengambil faktor SHAP (menggunakan cache jika sudah dihitung)."""
     res = cached_res if cached_res else predictor.predict_raw(match_data)
     return {
         "tool_name": "tool_explain_shap",
@@ -33,7 +40,6 @@ def tool_explain_shap(match_data: dict, cached_res: dict = None) -> dict:
 
 
 def tool_query_team_intelligence(team_name: str) -> dict:
-    """Tool 3: Menarik profil statistik dan rating True Elo tim."""
     stats = predictor.team_stats.get(
         team_name,
         {"elo_rating": 1500.0, "avg_scored": 1.4, "avg_conceded": 1.2, "total_matches": 0}
@@ -44,15 +50,15 @@ def tool_query_team_intelligence(team_name: str) -> dict:
         "data": {
             "team": team_name,
             "elo_rating": stats.get("elo_rating", 1500.0),
-            "avg_scored": stats.get("avg_scored", 1.4),
-            "avg_conceded": stats.get("avg_conceded", 1.2),
-            "total_matches": stats.get("total_matches", 0)
+            "avg_scored": stats.get("avg_scored_5", stats.get("avg_scored", 1.4)),
+            "avg_conceded": stats.get("avg_conceded_5", stats.get("avg_conceded", 1.2)),
+            "form_pts": stats.get("form_pts_5", 7),
+            "total_matches": stats.get("total_matches", stats.get("matches_played", 0))
         }
     }
 
 
 def tool_simulate_scenario(match_data: dict, scenario_type: str) -> dict:
-    """Tool 4: Mengeksekusi simulasi taktik what-if."""
     sim = predictor.simulate_scenario(match_data, scenario_type)
     return {
         "tool_name": "tool_simulate_scenario",
@@ -62,10 +68,10 @@ def tool_simulate_scenario(match_data: dict, scenario_type: str) -> dict:
 
 
 def tool_model_confidence_metrics() -> dict:
-    """Tool 5: Memberikan metrik transparansi ilmiah DINAMIS dari file model_metrics.json."""
-    base_dir = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-    metrics_path = os.path.join(base_dir, "..", "..", "ml", "models", "model_metrics.json")
+    """Tool 5: Membaca model_metrics.json secara dinamis dari root proyek."""
+    root_dir = find_project_root(os.path.dirname(os.path.abspath(__file__)), "ml")
     
+    # Nilai standar default (fallback aman)
     metrics = {
         "training_samples": 20783,
         "test_samples": 5196,
@@ -76,12 +82,14 @@ def tool_model_confidence_metrics() -> dict:
         "calibration_status": "Well-Calibrated (Brier < 0.60)"
     }
     
-    if os.path.exists(metrics_path):
-        try:
-            with open(metrics_path, "r") as f:
-                metrics = json.load(f)
-        except Exception:
-            pass
+    if root_dir:
+        metrics_path = os.path.join(root_dir, "ml", "models", "model_metrics.json")
+        if os.path.exists(metrics_path):
+            try:
+                with open(metrics_path, "r") as f:
+                    metrics = json.load(f)
+            except Exception:
+                pass
 
     return {
         "tool_name": "tool_model_confidence_metrics",
