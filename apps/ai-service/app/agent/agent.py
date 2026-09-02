@@ -40,7 +40,7 @@ class ChampIntelAgent:
         print(">>> 🤖 ChampIntel Hybrid Agent (Deterministic Engine + LLM Synthesizer) AKTIF! <<<")
         self.tools = TOOL_REGISTRY
 
-    def _classify_semantic_intent(self, query: str, home: str, away: str, chat_history: list = None) -> str:
+    def _classify_semantic_intent(self, query: str, home: str, away: str, chat_history: list = None) -> tuple[str, bool]:
         """NLU semantik: deteksi maksud dari sinonim, dwibahasa ID/EN, riwayat chat, atau tandai out-of-scope."""
         q_lower = query.lower()
 
@@ -58,7 +58,10 @@ class ChampIntelAgent:
                     for intent, patterns in INTENT_PATTERNS.items():
                         for pattern in patterns:
                             if re.search(pattern, last_q):
-                                return intent
+                                return intent, False
+                                return intent, True
+                                return "general_analysis", True
+                                return "general_analysis", False
                     break
 
         # Masih relevan sepak bola/laga ini? (sebut nama tim, atau pakai kata kunci umum bola)
@@ -79,7 +82,7 @@ class ChampIntelAgent:
 
         # 1. Klasifikasi intent DULU — kalau di luar konteks, langsung berhenti di sini
         #    tanpa buang komputasi XGBoost/SHAP untuk pertanyaan yang tidak relevan sama sekali.
-        intent = self._classify_semantic_intent(user_query, home, away, chat_history)
+        intent, is_contextual_fallback = self._classify_semantic_intent(user_query, home, away, chat_history)
 
         if intent == "out_of_scope":
             response_text = (
@@ -168,7 +171,7 @@ class ChampIntelAgent:
         )
 
         # Penanda konteks multi-turn — dipertahankan untuk verifikasi memori percakapan
-        if chat_history and len(chat_history) > 1:
+        if is_contextual_fallback:
             response_text = f"[Konteks Lanjutan]: {response_text}"
 
         if leg == 2:
