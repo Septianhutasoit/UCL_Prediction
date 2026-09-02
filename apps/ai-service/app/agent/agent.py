@@ -121,25 +121,28 @@ class ChampIntelAgent:
         a_prob_num = obs["prediction"]["away_win_prob"] * 100
         d_prob_num = obs["prediction"]["draw_prob"] * 100
 
-        h_prob = f"{h_prob_num:.1f}%"
-        d_prob = f"{d_prob_num:.1f}%"
-        a_prob = f"{a_prob_num:.1f}%"
         primary_factor = obs["shap"]["primary_factor"]
 
         q_lower = user_query.lower()
 
         # Paket fakta keras yang akan disuplai ke LLM (Tahap 2) — angka di sini
         # adalah SUMBER TUNGGAL kebenaran, LLM dilarang mengubahnya.
+        # PENTING: simpan angka MENTAH (float), bukan string "44.0%" — llm_service.py
+        # yang akan melakukan format persen sendiri (probs['home_win_prob']*100).
         ground_truth = {
-            "match_info": {"home_team": home, "away_team": away, "match_leg": leg},
-            "probabilities": {"home_win_prob": h_prob, "draw_prob": d_prob, "away_win_prob": a_prob},
-            "primary_factor": primary_factor,
-            "elo": {"home": h_elo, "away": a_elo, "difference": elo_diff},
-            "form": {
-                "home_scored": h_sc, "home_conceded": h_cc, "home_points_5": h_pts,
-                "away_scored": a_sc, "away_conceded": a_cc, "away_points_5": a_pts,
-            },
-        }
+    "match_info": {"home_team": home, "away_team": away, "match_leg": leg},
+    "probabilities": {
+        "home_win_prob": obs["prediction"]["home_win_prob"],
+        "draw_prob": obs["prediction"]["draw_prob"],
+        "away_win_prob": obs["prediction"]["away_win_prob"],
+    },
+    "primary_factor": primary_factor,
+    "elo": {"home": h_elo, "away": a_elo, "difference": elo_diff},
+    "form": {
+        "home_scored": h_sc, "home_conceded": h_cc, "home_points_5": h_pts,
+        "away_scored": a_sc, "away_conceded": a_cc, "away_points_5": a_pts,
+    },
+}
 
         # Tarik data tool tambahan HANYA jika intent memerlukannya
         if intent == "model_validation":
