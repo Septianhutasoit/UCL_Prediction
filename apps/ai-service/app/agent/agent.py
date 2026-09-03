@@ -6,22 +6,32 @@ from app.services.predictor import predictor
 from app.services.llm_service import llm_service
 
 # Kamus Semantik NLU (mendukung sinonim & dwibahasa ID/EN)
+# Kamus Semantik NLU Fleksibel & Bebas Tabrakan
 INTENT_PATTERNS = {
+    # 1. Validitas Ilmiah / Asal Data
     "model_validation": [
-        r"\b(yakin|percaya|akurasi|valid|metrik|brier|log loss|dasar|confident|accuracy|reliable|proof|evidence|darimana|dari mana|sumber|dataset|data ini|historis)\b"
+        r"\b(sumber data|asal data|basis data|data ini|darimana|dari mana|akurasi model|seberapa akurat|bisa dipercaya|yakin dengan|log loss|brier score|metrik validasi|bukti ilmiah|confidence metric|reliable)\b"
     ],
+    
+    # 2. Simulasi Skenario Taktik
     "scenario_simulation": [
-        r"\b(skenario|agresif|all out|what if|netral|simulasi|scenario|aggressive|neutral venue|simulate)\b"
+        r"\b(skenario|all out|all-out attack|tempat netral|neutral venue|simulasi taktik|what if|bagaimana jika|simulate)\b"
     ],
+    
+    # 3. Celah & Kelemahan Pertahanan
     "defensive_weakness": [
-        r"\b(lemah|kelemahan|celah|kebobolan|titik lemah|kekurangan|weakness|vulnerability|flaw|concede|leak)\b"
+        r"\b(kelemahan|titik lemah|celah|kebobolan|kekurangan pertahanan|kemasukan|rentan|vulnerability|defensive flaw|weakness|concede)\b"
     ],
+    
+    # 4. Strategi Bertahan & Serangan Balik
     "counter_strategy": [
-        r"\b(taktik|bertahan|parkir bus|counter|serangan balik|strategi|tactics|defend|low block|counter attack|strategy)\b"
+        r"\b(strategi bertahan|cara bertahan|taktik bertahan|parkir bus|low block|serangan balik|counter attack|counter strategy|defend|counter)\b"
     ],
+    
+    # 5. Duel Pemain & Poros Lini Tengah (Fleksibel: Menangkap 'midfield', 'matchup', dan 'duel')
     "key_matchup": [
-        r"\b(pemain|kunci|duel|bintang|man of the match|key player|midfield|pivot|lineup|star|gelandang)\b"
-    ],
+        r"\b(pemain kunci|duel kunci|gelandang jangkar|poros sentral|man of the match|key player|key matchup|midfield|matchup|duel|bintang)\b"
+    ]
 }
 
 # Kata kunci umum yang menandakan pertanyaan MASIH seputar sepak bola/laga,
