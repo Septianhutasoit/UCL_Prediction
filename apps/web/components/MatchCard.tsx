@@ -7,6 +7,8 @@ interface MatchCardProps {
     homeTeam: string;
     awayTeam: string;
     stage: string;
+    homeLogo?: string;
+    awayLogo?: string;
     active?: boolean;
     onSelect: () => void;
 }
